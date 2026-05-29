@@ -3,12 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Edit2, Trash2, ExternalLink } from "lucide-react";
 
+import { Product } from "@/lib/products";
+
 export default async function AdminProductsPage() {
-  let products = [];
+  let products: Product[] = [];
   try {
-    products = await prisma.product.findMany({
+    const dbProducts = await prisma.product.findMany({
       orderBy: { createdAt: "desc" }
     });
+    products = dbProducts as unknown as Product[];
   } catch (e) {
     console.error("Failed to fetch products from DB:", e);
   }
