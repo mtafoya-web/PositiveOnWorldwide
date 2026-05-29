@@ -13,11 +13,8 @@ function getBaseUrl() {
     process.env.AUTH0_BASE_URL ||
     process.env.VERCEL_PROJECT_PRODUCTION_URL ||
     process.env.VERCEL_URL ||
-    process.env.NEXT_PUBLIC_SITE_URL;
-
-  if (!url) {
-    return undefined;
-  }
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    "http://localhost:3000";
 
   return withProtocol(url).replace(/\/$/, "");
 }

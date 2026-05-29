@@ -138,17 +138,16 @@ export const collections: Collection[] = [
 ];
 
 export async function getProducts() {
-  const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
-
-  if (!hasDatabaseUrl()) return products;
-  
   try {
+    const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
+    if (!hasDatabaseUrl()) return products;
+    
     const dbProducts = await getPrisma().product.findMany({
       where: { active: true },
       orderBy: { createdAt: "desc" }
     });
 
-    return dbProducts as unknown as Product[];
+    return (dbProducts || []) as unknown as Product[];
   } catch (error) {
     console.error("Failed to fetch database products; using static catalog fallback.", error);
     return products;
@@ -156,11 +155,10 @@ export async function getProducts() {
 }
 
 export async function getProductBySlug(slug: string) {
-  const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
-
-  if (!hasDatabaseUrl()) return products.find((p) => p.slug === slug);
-  
   try {
+    const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
+    if (!hasDatabaseUrl()) return products.find((p) => p.slug === slug);
+    
     const product = await getPrisma().product.findUnique({
       where: { slug }
     });
@@ -173,11 +171,10 @@ export async function getProductBySlug(slug: string) {
 }
 
 export async function getProductById(id: string) {
-  const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
-
-  if (!hasDatabaseUrl()) return products.find((p) => p.id === id);
-  
   try {
+    const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
+    if (!hasDatabaseUrl()) return products.find((p) => p.id === id);
+    
     const product = await getPrisma().product.findUnique({
       where: { id }
     });
@@ -190,17 +187,16 @@ export async function getProductById(id: string) {
 }
 
 export async function getCollections() {
-  const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
-
-  if (!hasDatabaseUrl()) return collections;
-  
   try {
+    const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
+    if (!hasDatabaseUrl()) return collections;
+    
     const dbCollections = await getPrisma().collection.findMany({
       where: { active: true },
       orderBy: { createdAt: "desc" }
     });
 
-    return dbCollections as unknown as Collection[];
+    return (dbCollections || []) as unknown as Collection[];
   } catch (error) {
     console.error("Failed to fetch database collections; using static catalog fallback.", error);
     return collections;

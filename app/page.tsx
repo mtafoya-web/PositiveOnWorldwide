@@ -9,9 +9,9 @@ import { getCollections, getProducts } from "@/lib/products";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const productsList = await getProducts();
-  const collectionsList = await getCollections();
-  const featured = productsList.slice(0, 6);
+  const productsList = (await getProducts()) || [];
+  const collectionsList = (await getCollections()) || [];
+  const featured = Array.isArray(productsList) ? productsList.slice(0, 6) : [];
 
   return (
     <main className="bg-ink text-chalk">
