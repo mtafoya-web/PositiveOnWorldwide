@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, Instagram, ShieldCheck, Truck } from "lucide-react";
 import { ProductCard } from "@/components/store/product-card";
 import { useCart } from "@/components/store/cart-provider";
@@ -12,9 +12,31 @@ import type { Product, Size } from "@/lib/products";
 export function ProductDetailClient({ product, related }: { product: Product; related: Product[] }) {
   const [size, setSize] = useState<Size>(product?.sizes?.[0]);
   const [image, setImage] = useState(product?.gallery?.[0] || product?.image || "");
+  const [isMounted, setIsMounted] = useState(false);
   const { addItem } = useCart();
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   if (!product) return null;
+
+  if (!isMounted) {
+    return (
+      <main className="mx-auto max-w-7xl px-5 pb-20 pt-32 md:px-8 lg:px-10 bg-ink text-chalk">
+        <div className="h-8 w-32 animate-pulse bg-chalk/10" />
+        <section className="mt-8 grid gap-16 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="aspect-[4/5] animate-pulse bg-graphite" />
+          <div className="space-y-6">
+            <div className="h-4 w-24 animate-pulse bg-chalk/10" />
+            <div className="h-20 w-full animate-pulse bg-chalk/10" />
+            <div className="h-10 w-32 animate-pulse bg-chalk/10" />
+            <div className="h-40 w-full animate-pulse bg-chalk/5" />
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-7xl px-5 pb-20 pt-32 md:px-8 lg:px-10 bg-ink text-chalk">

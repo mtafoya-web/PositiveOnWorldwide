@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LockKeyhole } from "lucide-react";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { useCart } from "@/components/store/cart-provider";
@@ -12,6 +12,11 @@ export function CheckoutClient() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   async function startCheckout() {
     setLoading(true);
@@ -45,6 +50,21 @@ export function CheckoutClient() {
     }
   }
 
+  if (!isMounted) {
+    return (
+      <main className="mx-auto max-w-6xl px-5 pb-20 pt-28 md:px-8 lg:px-10">
+        <div className="mb-10">
+          <div className="h-16 w-64 animate-pulse bg-ink/10 md:h-20" />
+          <div className="mt-3 h-4 w-48 animate-pulse bg-ink/5" />
+        </div>
+        <div className="grid gap-6 lg:grid-cols-[1fr_420px]">
+          <div className="h-96 animate-pulse border border-ink/10 bg-white" />
+          <div className="h-96 animate-pulse border border-ink/10 bg-chalk" />
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="mx-auto max-w-6xl px-5 pb-20 pt-28 md:px-8 lg:px-10">
       <div className="mb-10">
@@ -70,7 +90,7 @@ export function CheckoutClient() {
                     <p className="font-bold">{item.name}</p>
                     <p className="text-sm text-graphite/65">Size {item.size} / Qty {item.quantity}</p>
                   </div>
-                  <p className="font-black">${item.price * item.quantity}</p>
+                  <p className="font-black">${(item.price || 0) * (item.quantity || 0)}</p>
                 </div>
               ))}
             </div>

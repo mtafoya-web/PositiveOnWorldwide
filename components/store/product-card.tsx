@@ -2,16 +2,34 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { useCart } from "@/components/store/cart-provider";
 import type { Product, Size } from "@/lib/products";
 
 export function ProductCard({ product }: { product: Product }) {
   const [size, setSize] = useState<Size>(product?.sizes?.[0]);
+  const [isMounted, setIsMounted] = useState(false);
   const { addItem } = useCart();
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   if (!product) return null;
+
+  if (!isMounted) {
+    return (
+      <article className="group border border-chalk/10 bg-graphite transition-all">
+        <div className="relative aspect-[4/5] animate-pulse bg-ink" />
+        <div className="p-6 space-y-4">
+          <div className="h-4 w-24 animate-pulse bg-chalk/10" />
+          <div className="h-8 w-48 animate-pulse bg-chalk/10" />
+          <div className="h-6 w-16 animate-pulse bg-chalk/10" />
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article className="group border border-chalk/10 bg-graphite transition-all hover:border-limeflash/30">

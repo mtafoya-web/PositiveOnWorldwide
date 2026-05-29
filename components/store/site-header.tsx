@@ -14,6 +14,22 @@ export function SiteHeader() {
     setIsMounted(true);
   }, []);
 
+  if (!isMounted) {
+    return (
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-chalk/5 bg-ink/60 backdrop-blur-lg">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 md:px-8 lg:px-10">
+          <div className="h-6 w-48 animate-pulse bg-chalk/10" />
+          <div className="hidden h-4 w-96 animate-pulse bg-chalk/5 md:block" />
+          <div className="flex gap-3">
+            <div className="h-10 w-10 animate-pulse bg-chalk/10" />
+            <div className="h-10 w-10 animate-pulse bg-chalk/10" />
+            <div className="h-10 w-10 animate-pulse bg-chalk/20" />
+          </div>
+        </div>
+      </header>
+    );
+  }
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-chalk/5 bg-ink/60 backdrop-blur-lg">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 md:px-8 lg:px-10">
@@ -47,7 +63,7 @@ export function SiteHeader() {
             className="relative flex h-10 w-10 items-center justify-center bg-chalk text-ink transition hover:bg-limeflash"
           >
             <ShoppingBag className="h-5 w-5" />
-            {isMounted && count > 0 ? (
+            {count > 0 ? (
               <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center bg-limeflash px-1 text-[10px] font-black text-ink ring-2 ring-ink">
                 {count}
               </span>
