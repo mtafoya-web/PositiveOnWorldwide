@@ -1,11 +1,6 @@
-import type { NextRequest } from "next/server";
-import { isProtectedPath, requireAuth } from "@/lib/auth";
+import { withMiddlewareAuthRequired } from "@auth0/nextjs-auth0/edge";
 
-export function middleware(request: NextRequest) {
-  if (isProtectedPath(request.nextUrl.pathname)) {
-    return requireAuth(request);
-  }
-}
+export default withMiddlewareAuthRequired();
 
 export const config = {
   matcher: ["/profile/:path*", "/orders/:path*"]

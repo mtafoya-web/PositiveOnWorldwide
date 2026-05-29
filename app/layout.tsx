@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/store/cart-provider";
@@ -16,10 +17,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans antialiased">
-        <CartProvider>
-          <SiteHeader />
-          {children}
-        </CartProvider>
+        <UserProvider>
+          <CartProvider>
+            <SiteHeader />
+            {children}
+          </CartProvider>
+        </UserProvider>
       </body>
     </html>
   );
