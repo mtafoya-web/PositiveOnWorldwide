@@ -2,8 +2,9 @@ import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
 import { Edit2, Trash2, ExternalLink } from "lucide-react";
-
 import { Product } from "@/lib/products";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminProductsPage() {
   let products: Product[] = [];
