@@ -5,6 +5,8 @@ import { ProductCard } from "@/components/store/product-card";
 import { Hero3D } from "@/components/store/hero-3d";
 import { brandLinks, getCollections, getProducts } from "@/lib/products";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const productsList = await getProducts();
   const collectionsList = await getCollections();
