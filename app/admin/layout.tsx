@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { isAdmin } from "@/lib/auth";
 import { auth0 } from "@/lib/auth0";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth0.getSession();
   

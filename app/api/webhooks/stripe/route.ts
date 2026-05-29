@@ -5,6 +5,7 @@ import { recordTransaction } from "@/lib/db";
 import { normalizeCheckoutPayload, type CheckoutLineItem } from "@/lib/payments";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   const secretKey = process.env.STRIPE_SECRET_KEY;
