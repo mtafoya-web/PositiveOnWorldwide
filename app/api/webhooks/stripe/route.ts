@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Stripe webhook credentials are not configured." }, { status: 503 });
   }
 
-  const stripe = new Stripe(secretKey, { apiVersion: "2024-06-20" });
+  const stripe = new Stripe(secretKey, { apiVersion: "2024-06-20" as any });
   const body = await request.text();
   const signature = headers().get("stripe-signature");
 
