@@ -20,7 +20,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const stripe = new Stripe(secretKey, { apiVersion: "2024-06-20" });
+    const stripe = new Stripe(secretKey, { apiVersion: "2024-06-20" as any });
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       customer_email: payload.customerEmail,
