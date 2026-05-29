@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import { upsertProduct } from "@/lib/actions";
 import { notFound } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditProductPage({ params }: { params: { id: string } }) {
   const isNew = params.id === "new";
   let product = null;
