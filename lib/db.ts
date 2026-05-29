@@ -1,5 +1,4 @@
 import type { CheckoutLineItem } from "@/lib/payments";
-import { prisma } from "@/lib/prisma";
 
 export async function recordTransaction(order: {
   id: string;
@@ -9,6 +8,8 @@ export async function recordTransaction(order: {
   items: CheckoutLineItem[];
   createdAt: string;
 }) {
+  const { prisma } = await import("@/lib/prisma");
+
   const existing = await prisma.order.findUnique({
     where: { stripeSessionId: order.id }
   });
@@ -46,6 +47,8 @@ export async function recordTransaction(order: {
 }
 
 export async function assertStockAvailable(items: CheckoutLineItem[]) {
+  const { prisma } = await import("@/lib/prisma");
+
   for (const item of items) {
     const product = await prisma.product.findUnique({
       where: { id: item.productId }

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { assertStockAvailable } from "@/lib/db";
 import { getConfiguredPaymentMethods, normalizeCheckoutPayload, toStripeLineItems } from "@/lib/payments";
 
 export const runtime = "nodejs";
@@ -10,8 +9,12 @@ export const revalidate = 0;
 
 export async function POST(request: Request) {
   try {
+    // Lazily import DB utilities to bypass build-time Prisma engine checks
+    const { assertStockAvailable } = await import("@/lib/db");
+    
     const payload = await normalizeCheckoutPayload(await request.json());
     await assertStockAvailable(payload.items);
+    
     const secretKey = process.env.STRIPE_SECRET_KEY;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 

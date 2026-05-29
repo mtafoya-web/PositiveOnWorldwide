@@ -1,7 +1,6 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { recordTransaction } from "@/lib/db";
 import { normalizeCheckoutPayload, type CheckoutLineItem } from "@/lib/payments";
 
 export const runtime = "nodejs";
@@ -47,6 +46,9 @@ export async function POST(request: Request) {
       const message = error instanceof Error ? error.message : "Invalid checkout line item metadata.";
       return NextResponse.json({ error: message }, { status: 400 });
     }
+
+    // Lazily import DB recordTransaction to bypass build-time Prisma engine checks
+    const { recordTransaction } = await import("@/lib/db");
 
     await recordTransaction({
       id: session.id,
