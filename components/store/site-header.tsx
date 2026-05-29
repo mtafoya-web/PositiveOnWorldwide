@@ -1,12 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Instagram, ShoppingBag, UserRound } from "lucide-react";
 import { useCart } from "@/components/store/cart-provider";
 import { brandLinks } from "@/lib/brand";
 
 export function SiteHeader() {
   const { count, openCart } = useCart();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-chalk/5 bg-ink/60 backdrop-blur-lg">
@@ -41,7 +47,7 @@ export function SiteHeader() {
             className="relative flex h-10 w-10 items-center justify-center bg-chalk text-ink transition hover:bg-limeflash"
           >
             <ShoppingBag className="h-5 w-5" />
-            {count > 0 ? (
+            {isMounted && count > 0 ? (
               <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center bg-limeflash px-1 text-[10px] font-black text-ink ring-2 ring-ink">
                 {count}
               </span>

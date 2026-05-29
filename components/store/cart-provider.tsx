@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { CartDrawer } from "@/components/store/cart-drawer";
 import type { Product, Size } from "@/lib/products";
 
@@ -31,10 +31,35 @@ const CartContext = createContext<CartContextValue | null>(null);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Persistence: Load from localStorage on mount
+  useEffect(() => {
+    setIsMounted(true);
+    try {
+      const saved = localStorage.getItem("positive_cart");
+      if (saved) {
+        setItems(JSON.parse(saved));
+      }
+    } catch (error) {
+      console.error("Failed to load cart from storage:", error);
+    }
+  }, []);
+
+  // Persistence: Save to localStorage when items change
+  useEffect(() => {
+    if (isMounted) {
+      try {
+        localStorage.setItem("positive_cart", JSON.stringify(items));
+      } catch (error) {
+        console.error("Failed to save cart to storage:", error);
+      }
+    }
+  }, [items, isMounted]);
 
   const value = useMemo<CartContextValue>(() => {
-    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const count = items.reduce((sum, item) => sum + item.quantity, 0);
+    const total = items.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 0), 0);
+    const count = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
 
     return {
       items,
@@ -44,11 +69,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),
       addItem: (product, size) => {
+        if (!product || !size) return;
         setItems((current) => {
           const existing = current.find((item) => item.productId === product.id && item.size === size);
           if (existing) {
             return current.map((item) =>
-              item.productId === product.id && item.size === size ? { ...item, quantity: item.quantity + 1 } : item
+              item.productId === product.id && item.size === size ? { ...item, quantity: (item.quantity || 0) + 1 } : item
             );
           }
 
@@ -83,7 +109,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   return (
     <CartContext.Provider value={value}>
       {children}
-      <CartDrawer />
+      {isMounted && <CartDrawer />}
     </CartContext.Provider>
   );
 }

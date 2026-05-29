@@ -8,15 +8,17 @@ import { useCart } from "@/components/store/cart-provider";
 import type { Product, Size } from "@/lib/products";
 
 export function ProductCard({ product }: { product: Product }) {
-  const [size, setSize] = useState<Size>(product.sizes[0]);
+  const [size, setSize] = useState<Size>(product?.sizes?.[0]);
   const { addItem } = useCart();
+
+  if (!product) return null;
 
   return (
     <article className="group border border-chalk/10 bg-graphite transition-all hover:border-limeflash/30">
       <Link href={`/product/${product.slug}`} className="relative block aspect-[4/5] overflow-hidden bg-ink">
         <Image 
-          src={product.image} 
-          alt={product.name} 
+          src={product.image || ""} 
+          alt={product.name || "Product"} 
           fill 
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" 
           className="object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-80" 
@@ -33,7 +35,7 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
         
         <div className="mt-6 flex flex-wrap gap-2">
-          {product.sizes.map((option) => (
+          {product.sizes?.map((option) => (
             <button
               key={option}
               type="button"

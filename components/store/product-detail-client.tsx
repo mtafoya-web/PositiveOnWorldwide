@@ -10,9 +10,11 @@ import { brandLinks } from "@/lib/brand";
 import type { Product, Size } from "@/lib/products";
 
 export function ProductDetailClient({ product, related }: { product: Product; related: Product[] }) {
-  const [size, setSize] = useState<Size>(product.sizes[0]);
-  const [image, setImage] = useState(product.gallery[0] || product.image);
+  const [size, setSize] = useState<Size>(product?.sizes?.[0]);
+  const [image, setImage] = useState(product?.gallery?.[0] || product?.image || "");
   const { addItem } = useCart();
+
+  if (!product) return null;
 
   return (
     <main className="mx-auto max-w-7xl px-5 pb-20 pt-32 md:px-8 lg:px-10 bg-ink text-chalk">
@@ -22,9 +24,9 @@ export function ProductDetailClient({ product, related }: { product: Product; re
       <section className="grid gap-16 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-6">
           <div className="relative aspect-[4/5] overflow-hidden border border-chalk/10 bg-graphite">
-            <Image src={image} alt={product.name} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+            <Image src={image} alt={product.name || "Product"} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
           </div>
-          {product.gallery.length > 0 && (
+          {product.gallery && product.gallery.length > 0 && (
             <div className="grid grid-cols-4 gap-4">
               {product.gallery.map((item) => (
                 <button
@@ -50,7 +52,7 @@ export function ProductDetailClient({ product, related }: { product: Product; re
           <div className="mt-12">
             <p className="mb-4 text-xs font-bold uppercase tracking-widest text-chalk/40">Select size</p>
             <div className="flex flex-wrap gap-3">
-              {product.sizes.map((option) => (
+              {product.sizes?.map((option) => (
                 <button
                   key={option}
                   type="button"
@@ -107,8 +109,8 @@ export function ProductDetailClient({ product, related }: { product: Product; re
       <section className="mt-32">
         <h2 className="mb-12 font-display text-4xl font-black uppercase tracking-tighter text-chalk">Complete the fit</h2>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {related.map((item) => (
-            <ProductCard key={item.id} product={item} />
+          {related?.map((item) => (
+            <ProductCard key={item?.id} product={item} />
           ))}
         </div>
       </section>

@@ -69,8 +69,8 @@ export default async function HomePage() {
           </Link>
         </div>
         <BentoGrid>
-          {collectionsList.map((item, index) => (
-            <BentoGridItem key={item.title} item={item} featured={index === 0} />
+          {collectionsList?.map((item, index) => (
+            <BentoGridItem key={item?.title || index} item={item} featured={index === 0} />
           ))}
         </BentoGrid>
       </section>
@@ -83,8 +83,8 @@ export default async function HomePage() {
             <p className="mx-auto mt-4 max-w-2xl text-chalk/60 text-sm uppercase tracking-[0.2em]">Limited pieces. Endless energy.</p>
           </div>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {featured?.map((product) => (
+              <ProductCard key={product?.id} product={product} />
             ))}
           </div>
           <div className="mt-20 flex justify-center">
