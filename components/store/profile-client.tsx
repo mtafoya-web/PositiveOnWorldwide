@@ -4,13 +4,17 @@ import { useEffect, useState } from "react";
 import { UserProfile } from "@auth0/nextjs-auth0/client";
 
 function getInitials(name?: string | null, email?: string | null) {
-  const source = name || email || "Account";
-  return source
-    .split(/\s|@/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("");
+  try {
+    const source = name || email || "Account";
+    return source
+      .split(/\s|@/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part?.[0]?.toUpperCase() || "")
+      .join("");
+  } catch {
+    return "??";
+  }
 }
 
 export function ProfileClient({ user }: { user: UserProfile }) {
@@ -29,15 +33,15 @@ export function ProfileClient({ user }: { user: UserProfile }) {
     );
   }
 
-  const displayName = user.name || user.nickname || "PositiveOnWorldwide member";
-  const email = user.email || "No email on file";
+  const displayName = user?.name || user?.nickname || "PositiveOnWorldwide member";
+  const email = user?.email || "No email on file";
 
   return (
     <main className="mx-auto max-w-5xl px-5 pb-20 pt-28 md:px-8">
       <h1 className="font-[var(--font-display)] text-5xl font-black uppercase md:text-7xl">Profile</h1>
       <section className="mt-8 grid gap-6 border border-ink bg-white p-6 md:grid-cols-[auto,1fr] md:items-center">
         <div className="grid h-24 w-24 place-items-center rounded-full border border-ink bg-limeflash font-[var(--font-display)] text-3xl font-black text-ink">
-          {getInitials(displayName, user.email)}
+          {getInitials(displayName, user?.email)}
         </div>
         <div>
           <p className="text-sm font-black uppercase tracking-wide text-graphite/60">Signed in</p>
