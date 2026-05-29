@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Collection } from "@/lib/products";
+import type { Collection } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
 export function BentoGrid({ children }: { children: React.ReactNode }) {

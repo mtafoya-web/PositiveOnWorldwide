@@ -8,11 +8,13 @@ export default async function OrdersPage() {
 
   let orders: any[] = [];
   if (userEmail) {
-    const { prisma } = await import("@/lib/prisma");
-    orders = await prisma.order.findMany({
-      where: { customerEmail: userEmail },
-      orderBy: { createdAt: "desc" }
-    });
+    const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
+    if (hasDatabaseUrl()) {
+      orders = await getPrisma().order.findMany({
+        where: { customerEmail: userEmail },
+        orderBy: { createdAt: "desc" }
+      });
+    }
   }
 
   return (

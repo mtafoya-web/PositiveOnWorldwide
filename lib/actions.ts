@@ -14,7 +14,8 @@ async function checkAdmin() {
 
 export async function upsertProduct(formData: FormData) {
   await checkAdmin();
-  const { prisma } = await import("@/lib/prisma");
+  const { getPrisma } = await import("@/lib/prisma");
+  const prisma = getPrisma();
   
   const id = formData.get("id") as string | null;
   const name = formData.get("name") as string;
@@ -64,8 +65,8 @@ export async function upsertProduct(formData: FormData) {
 
 export async function deleteProduct(id: string) {
   await checkAdmin();
-  const { prisma } = await import("@/lib/prisma");
-  await prisma.product.delete({
+  const { getPrisma } = await import("@/lib/prisma");
+  await getPrisma().product.delete({
     where: { id }
   });
   revalidatePath("/admin");

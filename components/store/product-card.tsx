@@ -3,9 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { ArrowRight, Instagram } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useCart } from "@/components/store/cart-provider";
-import { brandLinks, Product, Size } from "@/lib/products";
+import type { Product, Size } from "@/lib/products";
 
 export function ProductCard({ product }: { product: Product }) {
   const [size, setSize] = useState<Size>(product.sizes[0]);

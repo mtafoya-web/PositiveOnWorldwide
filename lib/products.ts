@@ -21,10 +21,6 @@ export type Collection = {
   active?: boolean;
 };
 
-export const brandLinks = {
-  instagram: "https://www.instagram.com/positiveonworldwide/"
-};
-
 // Fallback hardcoded products for development/seeding
 export const products: Product[] = [
   {
@@ -142,51 +138,71 @@ export const collections: Collection[] = [
 ];
 
 export async function getProducts() {
-  const { prisma } = await import("@/lib/prisma");
+  const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
 
-  if (!process.env.DATABASE_URL) return products;
+  if (!hasDatabaseUrl()) return products;
   
-  const dbProducts = await prisma.product.findMany({
-    where: { active: true },
-    orderBy: { createdAt: "desc" }
-  });
-  
-  return dbProducts as unknown as Product[];
+  try {
+    const dbProducts = await getPrisma().product.findMany({
+      where: { active: true },
+      orderBy: { createdAt: "desc" }
+    });
+
+    return dbProducts as unknown as Product[];
+  } catch (error) {
+    console.error("Failed to fetch database products; using static catalog fallback.", error);
+    return products;
+  }
 }
 
 export async function getProductBySlug(slug: string) {
-  const { prisma } = await import("@/lib/prisma");
+  const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
 
-  if (!process.env.DATABASE_URL) return products.find((p) => p.slug === slug);
+  if (!hasDatabaseUrl()) return products.find((p) => p.slug === slug);
   
-  const product = await prisma.product.findUnique({
-    where: { slug }
-  });
-  
-  return product as unknown as Product | null;
+  try {
+    const product = await getPrisma().product.findUnique({
+      where: { slug }
+    });
+
+    return product as unknown as Product | null;
+  } catch (error) {
+    console.error("Failed to fetch database product; using static catalog fallback.", error);
+    return products.find((p) => p.slug === slug) ?? null;
+  }
 }
 
 export async function getProductById(id: string) {
-  const { prisma } = await import("@/lib/prisma");
+  const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
 
-  if (!process.env.DATABASE_URL) return products.find((p) => p.id === id);
+  if (!hasDatabaseUrl()) return products.find((p) => p.id === id);
   
-  const product = await prisma.product.findUnique({
-    where: { id }
-  });
-  
-  return product as unknown as Product | null;
+  try {
+    const product = await getPrisma().product.findUnique({
+      where: { id }
+    });
+
+    return product as unknown as Product | null;
+  } catch (error) {
+    console.error("Failed to fetch database product by id; using static catalog fallback.", error);
+    return products.find((p) => p.id === id) ?? null;
+  }
 }
 
 export async function getCollections() {
-  const { prisma } = await import("@/lib/prisma");
+  const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
 
-  if (!process.env.DATABASE_URL) return collections;
+  if (!hasDatabaseUrl()) return collections;
   
-  const dbCollections = await prisma.collection.findMany({
-    where: { active: true },
-    orderBy: { createdAt: "desc" }
-  });
-  
-  return dbCollections as unknown as Collection[];
+  try {
+    const dbCollections = await getPrisma().collection.findMany({
+      where: { active: true },
+      orderBy: { createdAt: "desc" }
+    });
+
+    return dbCollections as unknown as Collection[];
+  } catch (error) {
+    console.error("Failed to fetch database collections; using static catalog fallback.", error);
+    return collections;
+  }
 }

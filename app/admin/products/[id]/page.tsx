@@ -9,8 +9,9 @@ export default async function EditProductPage({ params }: { params: { id: string
 
   if (!isNew) {
     try {
-      const { prisma } = await import("@/lib/prisma");
-      product = await prisma.product.findUnique({
+      const { getPrisma, hasDatabaseUrl } = await import("@/lib/prisma");
+      if (!hasDatabaseUrl()) notFound();
+      product = await getPrisma().product.findUnique({
         where: { id: params.id }
       });
       if (!product) notFound();

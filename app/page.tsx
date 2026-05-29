@@ -2,8 +2,9 @@ import Link from "next/link";
 import { ArrowRight, Instagram, Sparkles, Globe, Zap, Shield } from "lucide-react";
 import { BentoGrid, BentoGridItem } from "@/components/magicui/bento-grid";
 import { ProductCard } from "@/components/store/product-card";
-import { Hero3D } from "@/components/store/hero-3d";
-import { brandLinks, getCollections, getProducts } from "@/lib/products";
+import { Hero3DLoader } from "@/components/store/hero-3d-loader";
+import { brandLinks } from "@/lib/brand";
+import { getCollections, getProducts } from "@/lib/products";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +16,7 @@ export default async function HomePage() {
   return (
     <main className="bg-ink text-chalk">
       {/* 3D Hero Section */}
-      <Hero3D />
+      <Hero3DLoader />
 
       {/* Brand Ethos / About Section */}
       <section className="relative overflow-hidden py-24 md:py-32">

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useMemo, useState } from "react";
 import { CartDrawer } from "@/components/store/cart-drawer";
-import { Product, Size } from "@/lib/products";
+import type { Product, Size } from "@/lib/products";
 
 export type CartItem = {
   productId: string;

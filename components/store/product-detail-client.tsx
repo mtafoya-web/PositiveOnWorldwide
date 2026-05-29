@@ -6,7 +6,8 @@ import { useState } from "react";
 import { ArrowLeft, Instagram, ShieldCheck, Truck } from "lucide-react";
 import { ProductCard } from "@/components/store/product-card";
 import { useCart } from "@/components/store/cart-provider";
-import { brandLinks, Product, Size } from "@/lib/products";
+import { brandLinks } from "@/lib/brand";
+import type { Product, Size } from "@/lib/products";
 
 export function ProductDetailClient({ product, related }: { product: Product; related: Product[] }) {
   const [size, setSize] = useState<Size>(product.sizes[0]);

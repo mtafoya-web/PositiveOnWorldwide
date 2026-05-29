@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Instagram, ShoppingBag, UserRound } from "lucide-react";
 import { useCart } from "@/components/store/cart-provider";
-import { brandLinks } from "@/lib/products";
+import { brandLinks } from "@/lib/brand";
 
 export function SiteHeader() {
   const { count, openCart } = useCart();
