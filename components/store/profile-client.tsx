@@ -26,10 +26,10 @@ export function ProfileClient({ user }: { user: UserProfile }) {
 
   if (!isMounted) {
     return (
-      <main className="mx-auto max-w-5xl px-5 pb-20 pt-28 md:px-8">
+      <div className="mx-auto max-w-5xl px-5 pb-20 pt-28 md:px-8">
         <div className="h-16 w-64 animate-pulse bg-ink/10 md:h-20" />
         <section className="mt-8 h-48 animate-pulse border border-ink/10 bg-white" />
-      </main>
+      </div>
     );
   }
 
@@ -37,7 +37,7 @@ export function ProfileClient({ user }: { user: UserProfile }) {
   const email = user?.email || "No email on file";
 
   return (
-    <main className="mx-auto max-w-5xl px-5 pb-20 pt-28 md:px-8">
+    <div className="mx-auto max-w-5xl px-5 pb-20 pt-28 md:px-8">
       <h1 className="font-[var(--font-display)] text-5xl font-black uppercase md:text-7xl">Profile</h1>
       <section className="mt-8 grid gap-6 border border-ink bg-white p-6 md:grid-cols-[auto,1fr] md:items-center">
         <div className="grid h-24 w-24 place-items-center rounded-full border border-ink bg-limeflash font-[var(--font-display)] text-3xl font-black text-ink">
@@ -57,6 +57,6 @@ export function ProfileClient({ user }: { user: UserProfile }) {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

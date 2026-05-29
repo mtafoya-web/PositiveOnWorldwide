@@ -14,7 +14,7 @@ export default async function HomePage() {
   const featured = Array.isArray(productsList) ? productsList.slice(0, 6) : [];
 
   return (
-    <main className="bg-ink text-chalk">
+    <div className="bg-ink text-chalk">
       {/* 3D Hero Section */}
       <Hero3DLoader />
 
@@ -121,6 +121,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

@@ -52,7 +52,7 @@ export function CheckoutClient() {
 
   if (!isMounted) {
     return (
-      <main className="mx-auto max-w-6xl px-5 pb-20 pt-28 md:px-8 lg:px-10">
+      <div className="mx-auto max-w-6xl px-5 pb-20 pt-28 md:px-8 lg:px-10">
         <div className="mb-10">
           <div className="h-16 w-64 animate-pulse bg-ink/10 md:h-20" />
           <div className="mt-3 h-4 w-48 animate-pulse bg-ink/5" />
@@ -61,12 +61,12 @@ export function CheckoutClient() {
           <div className="h-96 animate-pulse border border-ink/10 bg-white" />
           <div className="h-96 animate-pulse border border-ink/10 bg-chalk" />
         </div>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-5 pb-20 pt-28 md:px-8 lg:px-10">
+    <div className="mx-auto max-w-6xl px-5 pb-20 pt-28 md:px-8 lg:px-10">
       <div className="mb-10">
         <h1 className="font-[var(--font-display)] text-5xl font-black uppercase md:text-7xl">Checkout</h1>
         <p className="mt-3 text-graphite/70">Review your cart and launch secure payment.</p>
@@ -131,6 +131,6 @@ export function CheckoutClient() {
           <p className="mt-5 text-xs leading-5 text-graphite/60">Supports cards, Apple Pay, Google Pay, Klarna, and Afterpay/Clearpay when enabled in Stripe.</p>
         </aside>
       </div>
-    </main>
+    </div>
   );
 }

@@ -11,15 +11,15 @@ export function OrdersClient({ orders }: { orders: any[] }) {
 
   if (!isMounted) {
     return (
-      <main className="mx-auto max-w-5xl px-5 pb-20 pt-32 md:px-8 text-chalk">
+      <div className="mx-auto max-w-5xl px-5 pb-20 pt-32 md:px-8 text-chalk">
         <div className="h-16 w-64 animate-pulse bg-chalk/10 md:h-20" />
         <section className="mt-8 h-64 animate-pulse border border-chalk/10 bg-graphite" />
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-5 pb-20 pt-32 md:px-8 text-chalk">
+    <div className="mx-auto max-w-5xl px-5 pb-20 pt-32 md:px-8 text-chalk">
       <h1 className="font-display text-5xl font-black uppercase md:text-7xl tracking-tighter text-chalk">Orders</h1>
       <section className="mt-8 border border-chalk/10 bg-graphite p-8">
         {orders.length === 0 ? (
@@ -41,6 +41,6 @@ export function OrdersClient({ orders }: { orders: any[] }) {
           </div>
         )}
       </section>
-    </main>
+    </div>
   );
 }

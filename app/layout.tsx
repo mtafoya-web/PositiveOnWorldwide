@@ -20,7 +20,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <UserProvider>
           <CartProvider>
             <SiteHeader />
-            {children}
+            <main id="main-content">
+              {children}
+            </main>
           </CartProvider>
         </UserProvider>
       </body>

@@ -23,7 +23,7 @@ export function ProductDetailClient({ product, related }: { product: Product; re
 
   if (!isMounted) {
     return (
-      <main className="mx-auto max-w-7xl px-5 pb-20 pt-32 md:px-8 lg:px-10 bg-ink text-chalk">
+      <div className="mx-auto max-w-7xl px-5 pb-20 pt-32 md:px-8 lg:px-10 bg-ink text-chalk">
         <div className="h-8 w-32 animate-pulse bg-chalk/10" />
         <section className="mt-8 grid gap-16 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="aspect-[4/5] animate-pulse bg-graphite" />
@@ -34,12 +34,12 @@ export function ProductDetailClient({ product, related }: { product: Product; re
             <div className="h-40 w-full animate-pulse bg-chalk/5" />
           </div>
         </section>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="mx-auto max-w-7xl px-5 pb-20 pt-32 md:px-8 lg:px-10 bg-ink text-chalk">
+    <div className="mx-auto max-w-7xl px-5 pb-20 pt-32 md:px-8 lg:px-10 bg-ink text-chalk">
       <Link href="/#shop" className="mb-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-chalk/60 hover:text-limeflash transition-colors">
         <ArrowLeft className="h-4 w-4" /> Back to shop
       </Link>
@@ -136,6 +136,6 @@ export function ProductDetailClient({ product, related }: { product: Product; re
           ))}
         </div>
       </section>
-    </main>
+    </div>
   );
 }
