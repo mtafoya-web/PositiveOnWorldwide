@@ -1,5 +1,4 @@
 import { auth0 } from "@/lib/auth0";
-import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -7,12 +6,14 @@ export default async function OrdersPage() {
   const session = await auth0.getSession();
   const userEmail = session?.user?.email;
 
-  const orders = userEmail 
-    ? await prisma.order.findMany({
-        where: { customerEmail: userEmail },
-        orderBy: { createdAt: "desc" }
-      })
-    : [];
+  let orders: any[] = [];
+  if (userEmail) {
+    const { prisma } = await import("@/lib/prisma");
+    orders = await prisma.order.findMany({
+      where: { customerEmail: userEmail },
+      orderBy: { createdAt: "desc" }
+    });
+  }
 
   return (
     <main className="mx-auto max-w-5xl px-5 pb-20 pt-32 md:px-8 text-chalk">

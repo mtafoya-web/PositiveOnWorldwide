@@ -1,4 +1,3 @@
-import { prisma } from "@/lib/prisma";
 import { upsertProduct } from "@/lib/actions";
 import { notFound } from "next/navigation";
 
@@ -10,6 +9,7 @@ export default async function EditProductPage({ params }: { params: { id: string
 
   if (!isNew) {
     try {
+      const { prisma } = await import("@/lib/prisma");
       product = await prisma.product.findUnique({
         where: { id: params.id }
       });
@@ -115,7 +115,7 @@ export default async function EditProductPage({ params }: { params: { id: string
           <label className="text-[10px] font-bold uppercase tracking-widest text-chalk/40">Gallery URLs (comma separated)</label>
           <input 
             name="gallery" 
-            defaultValue={product?.gallery.join(", ")}
+            defaultValue={product?.gallery ? product.gallery.join(", ") : ""}
             placeholder="url1, url2, url3"
             className="w-full bg-graphite border border-chalk/10 p-3 text-sm focus:border-limeflash outline-none"
           />
@@ -126,7 +126,7 @@ export default async function EditProductPage({ params }: { params: { id: string
           <input 
             required
             name="sizes" 
-            defaultValue={product?.sizes.join(", ") || "XS, S, M, L, XL, XXL"}
+            defaultValue={product?.sizes ? product.sizes.join(", ") : "XS, S, M, L, XL, XXL"}
             placeholder="S, M, L"
             className="w-full bg-graphite border border-chalk/10 p-3 text-sm focus:border-limeflash outline-none"
           />

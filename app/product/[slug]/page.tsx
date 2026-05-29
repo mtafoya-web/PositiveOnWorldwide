@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 import { ProductDetailClient } from "@/components/store/product-detail-client";
-import { getProductBySlug, getProducts } from "@/lib/products";
+import { getProductBySlug, getProducts, products } from "@/lib/products";
+
+export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
-  const productsList = await getProducts();
-  return productsList.map((product) => ({ slug: product.slug }));
+  // Use hardcoded products for static generation to avoid build-time DB connection
+  return products.map((product) => ({ slug: product.slug }));
 }
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {

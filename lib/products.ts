@@ -1,5 +1,3 @@
-import { prisma } from "@/lib/prisma";
-
 export type Size = "XS" | "S" | "M" | "L" | "XL" | "XXL";
 
 export type Product = {
@@ -95,7 +93,7 @@ export const products: Product[] = [
     name: "Lime Stitch Cap",
     category: "Accessories",
     price: 34,
-    description: "Low-profile cotton cap with electric lime embroidery and metal back clasp.",
+    description: "Low-profile cotton_cap with electric lime embroidery and metal back clasp.",
     sizes: ["S", "M", "L"],
     stock: 33,
     image: "https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=900&q=85",
@@ -144,6 +142,8 @@ export const collections: Collection[] = [
 ];
 
 export async function getProducts() {
+  const { prisma } = await import("@/lib/prisma");
+
   if (!process.env.DATABASE_URL) return products;
   
   const dbProducts = await prisma.product.findMany({
@@ -155,6 +155,8 @@ export async function getProducts() {
 }
 
 export async function getProductBySlug(slug: string) {
+  const { prisma } = await import("@/lib/prisma");
+
   if (!process.env.DATABASE_URL) return products.find((p) => p.slug === slug);
   
   const product = await prisma.product.findUnique({
@@ -165,6 +167,8 @@ export async function getProductBySlug(slug: string) {
 }
 
 export async function getProductById(id: string) {
+  const { prisma } = await import("@/lib/prisma");
+
   if (!process.env.DATABASE_URL) return products.find((p) => p.id === id);
   
   const product = await prisma.product.findUnique({
@@ -175,6 +179,8 @@ export async function getProductById(id: string) {
 }
 
 export async function getCollections() {
+  const { prisma } = await import("@/lib/prisma");
+
   if (!process.env.DATABASE_URL) return collections;
   
   const dbCollections = await prisma.collection.findMany({
