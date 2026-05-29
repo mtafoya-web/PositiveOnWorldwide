@@ -15,7 +15,20 @@ export function hasAuth0Configuration() {
 }
 
 export function isProtectedPath(pathname: string) {
-  return pathname === "/profile" || pathname.startsWith("/profile/") || pathname === "/orders" || pathname.startsWith("/orders/");
+  return (
+    pathname === "/profile" ||
+    pathname.startsWith("/profile/") ||
+    pathname === "/orders" ||
+    pathname.startsWith("/orders/") ||
+    pathname === "/admin" ||
+    pathname.startsWith("/admin/")
+  );
+}
+
+export function isAdmin(userEmail: string | null | undefined) {
+  if (!userEmail) return false;
+  const adminEmails = (process.env.ADMIN_EMAILS || "").split(",").map((email) => email.trim().toLowerCase());
+  return adminEmails.includes(userEmail.toLowerCase());
 }
 
 export function requireAuth(request: NextRequest) {

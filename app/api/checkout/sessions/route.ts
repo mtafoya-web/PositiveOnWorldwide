@@ -7,8 +7,8 @@ export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
-    const payload = normalizeCheckoutPayload(await request.json());
-    assertStockAvailable(payload.items);
+    const payload = await normalizeCheckoutPayload(await request.json());
+    await assertStockAvailable(payload.items);
     const secretKey = process.env.STRIPE_SECRET_KEY;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       mode: "payment",
       customer_email: payload.customerEmail,
       payment_method_types: getConfiguredPaymentMethods(),
-      line_items: toStripeLineItems(payload.items),
+      line_items: await toStripeLineItems(payload.items),
       success_url: process.env.STRIPE_SUCCESS_URL ?? `${siteUrl}/orders?checkout=success`,
       cancel_url: process.env.STRIPE_CANCEL_URL ?? `${siteUrl}/checkout?checkout=cancelled`,
       metadata: {

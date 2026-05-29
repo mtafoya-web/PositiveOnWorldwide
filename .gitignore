@@ -9,3 +9,5 @@ dist
 .codex
 .vercel
 .env*
+
+/lib/generated/prisma

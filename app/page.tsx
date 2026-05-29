@@ -1,114 +1,120 @@
 import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight, Instagram, Sparkles } from "lucide-react";
+import { ArrowRight, Instagram, Sparkles, Globe, Zap, Shield } from "lucide-react";
 import { BentoGrid, BentoGridItem } from "@/components/magicui/bento-grid";
-import { InteractiveGridPattern } from "@/components/magicui/interactive-grid-pattern";
-import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { ProductCard } from "@/components/store/product-card";
-import { brandLinks, collections, products } from "@/lib/products";
+import { Hero3D } from "@/components/store/hero-3d";
+import { brandLinks, getCollections, getProducts } from "@/lib/products";
 
-export default function HomePage() {
-  const featured = products.slice(0, 6);
+export default async function HomePage() {
+  const productsList = await getProducts();
+  const collectionsList = await getCollections();
+  const featured = productsList.slice(0, 6);
 
   return (
-    <main>
-      <section className="relative isolate min-h-[92vh] overflow-hidden border-b border-ink/10 bg-chalk">
-        <InteractiveGridPattern />
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 pb-16 pt-28 md:grid-cols-[1.05fr_0.95fr] md:px-8 lg:px-10">
-          <div className="relative z-10 flex flex-col justify-center">
-            <h1 className="max-w-4xl font-[var(--font-display)] text-6xl font-black uppercase leading-[0.86] tracking-normal text-ink md:text-8xl lg:text-[8.5rem]">
-              Positive On Worldwide
-            </h1>
-            <p className="mt-8 max-w-xl text-lg leading-8 text-graphite/80 md:text-xl">
-              Premium streetwear, movement-ready essentials, and limited drops built for everyday confidence.
-            </p>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <ShimmerButton asChild>
-                <Link href="#shop">
-                  Shop the drop <ArrowRight className="h-4 w-4" />
-                </Link>
-              </ShimmerButton>
-              <Link
-                href="#collections"
-                className="inline-flex h-12 items-center justify-center rounded-none border border-ink px-6 text-sm font-bold uppercase tracking-normal transition hover:bg-ink hover:text-chalk"
-              >
-                View collections
-              </Link>
-              <Link
-                href={brandLinks.instagram}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex h-12 items-center justify-center rounded-none border border-ink px-6 text-sm font-bold uppercase tracking-normal transition hover:bg-ink hover:text-chalk"
-              >
-                <Instagram className="mr-2 h-4 w-4" />
-                Follow Instagram
-              </Link>
-            </div>
-          </div>
-          <div className="relative z-10 min-h-[520px]">
-            <div className="absolute left-1/2 top-6 h-[520px] w-[74%] -translate-x-1/2 rotate-2 overflow-hidden border border-ink bg-white shadow-lift">
-              <Image
-                src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=1000&q=85"
-                alt="Model wearing PositiveOnWorldwide streetwear"
-                fill
-                sizes="(min-width: 768px) 40vw, 90vw"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="absolute bottom-12 left-0 w-56 border border-ink bg-limeflash p-5 shadow-lift animate-float">
-              <Sparkles className="mb-8 h-7 w-7" />
-              <p className="font-[var(--font-display)] text-2xl font-black uppercase leading-none">
-                Limited seasonal stock
+    <main className="bg-ink text-chalk">
+      {/* 3D Hero Section */}
+      <Hero3D />
+
+      {/* Brand Ethos / About Section */}
+      <section className="relative overflow-hidden py-24 md:py-32">
+        <div className="mx-auto max-w-7xl px-5 md:px-8">
+          <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+            <div>
+              <h2 className="font-display text-4xl font-black uppercase leading-none md:text-7xl lg:text-8xl">
+                More Than <br />
+                <span className="text-limeflash">A Brand.</span>
+              </h2>
+              <p className="mt-8 max-w-xl text-lg leading-relaxed text-chalk/80 md:text-xl">
+                Positive On Worldwide represents a mindset: stay positive, move with purpose, and make your presence felt wherever you are. Every piece is designed to carry that energy into the world.
               </p>
+              <div className="mt-12 grid grid-cols-2 gap-8 md:grid-cols-3">
+                <div className="flex flex-col gap-3">
+                  <Globe className="h-8 w-8 text-limeflash" />
+                  <span className="text-sm font-bold uppercase tracking-wider">Global Movement</span>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <Zap className="h-8 w-8 text-limeflash" />
+                  <span className="text-sm font-bold uppercase tracking-wider">High Energy</span>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <Shield className="h-8 w-8 text-limeflash" />
+                  <span className="text-sm font-bold uppercase tracking-wider">Premium Quality</span>
+                </div>
+              </div>
             </div>
-            <div className="absolute right-0 top-32 w-44 border border-ink bg-ink p-4 text-chalk shadow-lift">
-              <p className="text-xs font-bold uppercase">Worldwide shipping</p>
-              <p className="mt-2 text-sm text-chalk/70">Fast fulfillment for every drop.</p>
+            <div className="relative aspect-square overflow-hidden border border-chalk/10">
+              <img 
+                src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=1000&q=85" 
+                alt="Brand movement" 
+                className="h-full w-full object-cover grayscale transition-all duration-700 hover:grayscale-0"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent" />
             </div>
           </div>
         </div>
       </section>
 
-      <section id="collections" className="mx-auto max-w-7xl px-5 py-20 md:px-8 lg:px-10">
-        <div className="mb-10 flex items-end justify-between gap-6">
+      {/* Collections Section */}
+      <section id="collections" className="mx-auto max-w-7xl px-5 py-24 md:px-8 lg:px-10">
+        <div className="mb-16 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <h2 className="font-[var(--font-display)] text-4xl font-black uppercase md:text-6xl">Collections</h2>
-            <p className="mt-3 max-w-2xl text-graphite/70">Bento-built edits for travel days, late nights, and clean everyday fits.</p>
+            <h2 className="font-display text-4xl font-black uppercase md:text-6xl">Collections</h2>
+            <p className="mt-4 max-w-2xl text-chalk/60 text-sm uppercase tracking-widest">Bento-built edits for the global community.</p>
           </div>
+          <Link href="#shop" className="group flex items-center gap-2 font-bold uppercase tracking-wider text-limeflash">
+            View All Drops <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
         <BentoGrid>
-          {collections.map((item, index) => (
+          {collectionsList.map((item, index) => (
             <BentoGridItem key={item.title} item={item} featured={index === 0} />
           ))}
         </BentoGrid>
       </section>
 
-      <section id="shop" className="border-y border-ink/10 bg-white py-20">
-        <div className="mx-auto max-w-7xl px-5 md:px-8 lg:px-10">
-          <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-            <div>
-              <h2 className="font-[var(--font-display)] text-4xl font-black uppercase md:text-6xl">Latest Apparel</h2>
-              <p className="mt-3 max-w-2xl text-graphite/70">Structured outerwear, heavyweight fleece, and elevated essentials.</p>
-            </div>
-            <div className="flex flex-wrap items-center gap-5">
-              <Link href="/checkout" className="text-sm font-black uppercase underline underline-offset-8">
-                Checkout cart
-              </Link>
-              <Link
-                href={brandLinks.instagram}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-black uppercase underline underline-offset-8"
-              >
-                <Instagram className="h-4 w-4" />
-                Instagram drops
-              </Link>
-            </div>
+      {/* Featured Products / Shop Section */}
+      <section id="shop" className="bg-graphite py-24 md:py-32">
+        <div className="mx-auto max-w-7xl px-5 md:px-8">
+          <div className="mb-16 text-center">
+            <h2 className="font-display text-5xl font-black uppercase md:text-7xl">Latest Drops</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-chalk/60 text-sm uppercase tracking-[0.2em]">Limited pieces. Endless energy.</p>
           </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {featured.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
+          </div>
+          <div className="mt-20 flex justify-center">
+             <Link
+                href={brandLinks.instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-14 items-center justify-center border border-chalk/20 px-10 text-sm font-bold uppercase tracking-[0.2em] transition hover:bg-chalk hover:text-ink"
+              >
+                <Instagram className="mr-3 h-5 w-5" />
+                Join the Movement on Instagram
+              </Link>
+          </div>
+        </div>
+      </section>
+      
+      {/* Newsletter / Community Section */}
+      <section className="border-t border-chalk/5 py-24 text-center">
+        <div className="mx-auto max-w-3xl px-5">
+          <Sparkles className="mx-auto mb-8 h-12 w-12 text-limeflash" />
+          <h2 className="font-display text-4xl font-black uppercase md:text-6xl">Stay Positive.</h2>
+          <p className="mt-6 text-chalk/70 md:text-lg">
+            Be the first to know about new drops, community events, and global movements.
+          </p>
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+            <input 
+              type="email" 
+              placeholder="YOUR EMAIL" 
+              className="h-14 flex-1 border border-chalk/10 bg-graphite px-6 text-sm font-bold uppercase tracking-wider outline-none focus:border-limeflash"
+            />
+            <button className="h-14 bg-limeflash px-10 text-sm font-bold uppercase tracking-wider text-ink transition-transform hover:scale-105">
+              Subscribe
+            </button>
           </div>
         </div>
       </section>

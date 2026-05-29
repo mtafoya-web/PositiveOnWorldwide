@@ -39,13 +39,13 @@ export async function POST(request: Request) {
 
     let items: CheckoutLineItem[];
     try {
-      items = parseItems(session.metadata?.items);
+      items = await parseItems(session.metadata?.items);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Invalid checkout line item metadata.";
       return NextResponse.json({ error: message }, { status: 400 });
     }
 
-    recordTransaction({
+    await recordTransaction({
       id: session.id,
       stripeEventId: event.id,
       customerEmail: session.customer_details?.email ?? session.customer_email,
@@ -58,13 +58,14 @@ export async function POST(request: Request) {
   return NextResponse.json({ received: true });
 }
 
-function parseItems(value: string | undefined): CheckoutLineItem[] {
+async function parseItems(value: string | undefined): Promise<CheckoutLineItem[]> {
   if (!value) {
     throw new Error("Missing checkout line item metadata.");
   }
 
   try {
-    return normalizeCheckoutPayload({ items: JSON.parse(value) }).items;
+    const payload = await normalizeCheckoutPayload({ items: JSON.parse(value) });
+    return payload.items;
   } catch {
     throw new Error("Invalid checkout line item metadata.");
   }

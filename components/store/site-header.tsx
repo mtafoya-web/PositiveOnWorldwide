@@ -9,36 +9,40 @@ export function SiteHeader() {
   const { count, openCart } = useCart();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b border-ink/10 bg-chalk/88 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8 lg:px-10">
-        <Link href="/" className="font-[var(--font-display)] text-xl font-black uppercase">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-chalk/5 bg-ink/60 backdrop-blur-lg">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 md:px-8 lg:px-10">
+        <Link href="/" className="font-display text-xl font-black uppercase tracking-tighter text-chalk">
           PositiveOnWorldwide
         </Link>
-        <nav className="hidden items-center gap-8 text-sm font-bold uppercase md:flex">
-          <Link href="/#shop">Shop</Link>
-          <Link href="/#collections">Collections</Link>
-          <Link href="/#shop">New Arrivals</Link>
-          <Link href={brandLinks.instagram} target="_blank" rel="noreferrer">
+        <nav className="hidden items-center gap-10 text-[10px] font-bold uppercase tracking-[0.2em] text-chalk/70 md:flex">
+          <Link href="/#shop" className="transition hover:text-limeflash">Shop</Link>
+          <Link href="/#collections" className="transition hover:text-limeflash">Collections</Link>
+          <Link href="/#shop" className="transition hover:text-limeflash">New Arrivals</Link>
+          <Link href={brandLinks.instagram} target="_blank" rel="noreferrer" className="transition hover:text-limeflash">
             Instagram
           </Link>
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Link
             aria-label="PositiveOnWorldwide Instagram"
             href={brandLinks.instagram}
             target="_blank"
             rel="noreferrer"
-            className="grid h-10 w-10 place-items-center border border-ink"
+            className="flex h-10 w-10 items-center justify-center border border-chalk/10 text-chalk transition hover:border-limeflash hover:text-limeflash"
           >
             <Instagram className="h-5 w-5" />
           </Link>
-          <Link aria-label="Account profile" href="/profile" className="grid h-10 w-10 place-items-center border border-ink">
+          <Link aria-label="Account profile" href="/profile" className="flex h-10 w-10 items-center justify-center border border-chalk/10 text-chalk transition hover:border-limeflash hover:text-limeflash">
             <UserRound className="h-5 w-5" />
           </Link>
-          <button aria-label="Open cart" onClick={openCart} className="relative grid h-10 w-10 place-items-center border border-ink bg-ink text-chalk">
+          <button 
+            aria-label="Open cart" 
+            onClick={openCart} 
+            className="relative flex h-10 w-10 items-center justify-center bg-chalk text-ink transition hover:bg-limeflash"
+          >
             <ShoppingBag className="h-5 w-5" />
             {count > 0 ? (
-              <span className="absolute -right-2 -top-2 grid h-5 min-w-5 place-items-center rounded-full bg-limeflash px-1 text-xs font-black text-ink">
+              <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center bg-limeflash px-1 text-[10px] font-black text-ink ring-2 ring-ink">
                 {count}
               </span>
             ) : null}

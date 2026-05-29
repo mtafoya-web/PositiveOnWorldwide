@@ -1,3 +1,5 @@
+import { prisma } from "@/lib/prisma";
+
 export type Size = "XS" | "S" | "M" | "L" | "XL" | "XXL";
 
 export type Product = {
@@ -11,18 +13,21 @@ export type Product = {
   stock: number;
   image: string;
   gallery: string[];
+  active?: boolean;
 };
 
 export type Collection = {
   title: string;
   description: string;
   image: string;
+  active?: boolean;
 };
 
 export const brandLinks = {
   instagram: "https://www.instagram.com/positiveonworldwide/"
 };
 
+// Fallback hardcoded products for development/seeding
 export const products: Product[] = [
   {
     id: "hoodie-core-black",
@@ -138,10 +143,44 @@ export const collections: Collection[] = [
   }
 ];
 
-export function getProductBySlug(slug: string) {
-  return products.find((product) => product.slug === slug);
+export async function getProducts() {
+  if (!process.env.DATABASE_URL) return products;
+  
+  const dbProducts = await prisma.product.findMany({
+    where: { active: true },
+    orderBy: { createdAt: "desc" }
+  });
+  
+  return dbProducts as unknown as Product[];
 }
 
-export function getProductById(id: string) {
-  return products.find((product) => product.id === id);
+export async function getProductBySlug(slug: string) {
+  if (!process.env.DATABASE_URL) return products.find((p) => p.slug === slug);
+  
+  const product = await prisma.product.findUnique({
+    where: { slug }
+  });
+  
+  return product as unknown as Product | null;
+}
+
+export async function getProductById(id: string) {
+  if (!process.env.DATABASE_URL) return products.find((p) => p.id === id);
+  
+  const product = await prisma.product.findUnique({
+    where: { id }
+  });
+  
+  return product as unknown as Product | null;
+}
+
+export async function getCollections() {
+  if (!process.env.DATABASE_URL) return collections;
+  
+  const dbCollections = await prisma.collection.findMany({
+    where: { active: true },
+    orderBy: { createdAt: "desc" }
+  });
+  
+  return dbCollections as unknown as Collection[];
 }

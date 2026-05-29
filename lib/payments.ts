@@ -21,7 +21,7 @@ const supportedPaymentMethodSet = new Set<string>(supportedPaymentMethods);
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"] as const satisfies readonly Size[];
 const sizeSet = new Set<string>(sizes);
 
-export function normalizeCheckoutPayload(payload: unknown): CheckoutPayload {
+export async function normalizeCheckoutPayload(payload: unknown): Promise<CheckoutPayload> {
   if (!isRecord(payload)) {
     throw new Error("Invalid checkout payload.");
   }
@@ -31,9 +31,7 @@ export function normalizeCheckoutPayload(payload: unknown): CheckoutPayload {
     throw new Error("Checkout requires at least one line item.");
   }
 
-  return {
-    customerEmail: normalizeEmail(input.customerEmail),
-    items: input.items.map((item) => {
+  const items = await Promise.all(input.items.map(async (item) => {
       if (!isRecord(item)) {
         throw new Error("Invalid checkout line item.");
       }
@@ -45,7 +43,7 @@ export function normalizeCheckoutPayload(payload: unknown): CheckoutPayload {
         throw new Error("Invalid checkout line item.");
       }
 
-      const product = getProductById(productId);
+      const product = await getProductById(productId);
       if (!product || !product.sizes.includes(size) || quantity < 1) {
         throw new Error("Checkout line item is unavailable.");
       }
@@ -55,7 +53,11 @@ export function normalizeCheckoutPayload(payload: unknown): CheckoutPayload {
         size,
         quantity: Math.min(Math.floor(quantity), 10)
       };
-    })
+  }));
+
+  return {
+    customerEmail: normalizeEmail(input.customerEmail),
+    items
   };
 }
 
@@ -76,9 +78,9 @@ export function getConfiguredPaymentMethods(): SupportedPaymentMethod[] {
   return configured as SupportedPaymentMethod[];
 }
 
-export function toStripeLineItems(items: CheckoutLineItem[]): Stripe.Checkout.SessionCreateParams.LineItem[] {
-  return items.map((item) => {
-    const product = getProductById(item.productId);
+export async function toStripeLineItems(items: CheckoutLineItem[]): Promise<Stripe.Checkout.SessionCreateParams.LineItem[]> {
+  return Promise.all(items.map(async (item) => {
+    const product = await getProductById(item.productId);
     if (!product) {
       throw new Error("Product not found.");
     }
@@ -99,7 +101,7 @@ export function toStripeLineItems(items: CheckoutLineItem[]): Stripe.Checkout.Se
         }
       }
     };
-  });
+  }));
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
