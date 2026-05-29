@@ -1,10 +1,10 @@
-import { getSession } from "@auth0/nextjs-auth0";
+import { auth0 } from "@/lib/auth0";
 import { getRecordedOrders } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export default async function OrdersPage() {
-  await getSession();
+  await auth0.getSession();
   const orders = getRecordedOrders();
 
   return (

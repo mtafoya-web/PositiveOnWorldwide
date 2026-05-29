@@ -1,5 +1,5 @@
-import { getSession } from "@auth0/nextjs-auth0";
 import { redirect } from "next/navigation";
+import { auth0 } from "@/lib/auth0";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +14,7 @@ function getInitials(name?: string | null, email?: string | null) {
 }
 
 export default async function ProfilePage() {
-  const session = await getSession();
+  const session = await auth0.getSession();
 
   if (!session?.user) {
     redirect("/api/auth/login?returnTo=/profile");

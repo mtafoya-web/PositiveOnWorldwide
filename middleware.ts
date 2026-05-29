@@ -1,6 +1,6 @@
-import { withMiddlewareAuthRequired } from "@auth0/nextjs-auth0/edge";
+import { auth0 } from "@/lib/auth0-edge";
 
-export default withMiddlewareAuthRequired();
+export default auth0.withMiddlewareAuthRequired();
 
 export const config = {
   matcher: ["/profile/:path*", "/orders/:path*"]
