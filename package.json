@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "postinstall": "prisma generate",
+    "seed": "prisma db seed",
     "lint": "next lint"
   },
   "dependencies": {
