@@ -144,10 +144,16 @@ export function Hero3D() {
             Wear the Energy. Spread the Movement.
           </p>
           <div className="mt-8 flex items-center justify-center gap-6 pointer-events-auto">
-            <button className="bg-chalk px-8 py-3 font-display text-sm font-bold uppercase tracking-wider text-ink transition-transform hover:scale-105 active:scale-95">
+            <button 
+              aria-label="Shop the latest drop"
+              className="bg-chalk px-8 py-3 font-display text-sm font-bold uppercase tracking-wider text-ink transition-transform hover:scale-105 active:scale-95"
+            >
               Shop the Drop
             </button>
-            <button className="border border-chalk/30 px-8 py-3 font-display text-sm font-bold uppercase tracking-wider text-chalk backdrop-blur-sm transition-all hover:bg-chalk/10">
+            <button 
+              aria-label="Learn about the brand"
+              className="border border-chalk/30 px-8 py-3 font-display text-sm font-bold uppercase tracking-wider text-chalk backdrop-blur-sm transition-all hover:bg-chalk/10"
+            >
               The Brand
             </button>
           </div>

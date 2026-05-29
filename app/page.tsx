@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Instagram, Sparkles, Globe, Zap, Shield } from "lucide-react";
 import { BentoGrid, BentoGridItem } from "@/components/magicui/bento-grid";
@@ -46,9 +47,11 @@ export default async function HomePage() {
               </div>
             </div>
             <div className="relative aspect-square overflow-hidden border border-chalk/10">
-              <img 
+              <Image 
                 src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=1000&q=85" 
                 alt="Brand movement" 
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 className="h-full w-full object-cover grayscale transition-all duration-700 hover:grayscale-0"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent" />
@@ -115,7 +118,10 @@ export default async function HomePage() {
               placeholder="YOUR EMAIL" 
               className="h-14 flex-1 border border-chalk/10 bg-graphite px-6 text-sm font-bold uppercase tracking-wider outline-none focus:border-limeflash"
             />
-            <button className="h-14 bg-limeflash px-10 text-sm font-bold uppercase tracking-wider text-ink transition-transform hover:scale-105">
+            <button 
+              aria-label="Subscribe to newsletter"
+              className="h-14 bg-limeflash px-10 text-sm font-bold uppercase tracking-wider text-ink transition-transform hover:scale-105"
+            >
               Subscribe
             </button>
           </div>

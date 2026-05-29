@@ -41,7 +41,11 @@ export function CartDrawer() {
           {items.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center text-center">
               <p className="text-sm font-bold uppercase tracking-widest text-chalk/40">Your cart is empty.</p>
-              <button onClick={closeCart} className="mt-4 text-xs font-bold uppercase tracking-widest text-limeflash underline underline-offset-4">
+              <button 
+                aria-label="Continue shopping and close cart"
+                onClick={closeCart} 
+                className="mt-4 text-xs font-bold uppercase tracking-widest text-limeflash underline underline-offset-4"
+              >
                 Continue Shopping
               </button>
             </div>
