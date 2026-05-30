@@ -8,6 +8,7 @@ const envSchema = z.object({
 
   // Database
   DATABASE_URL: z.string().url(),
+  DIRECT_URL: z.string().url().optional(),
 
   // Auth0
   AUTH0_SECRET: z.string().min(1),
@@ -34,6 +35,7 @@ const processEnv = {
   NEXT_PUBLIC_BRAND_NAME: process.env.NEXT_PUBLIC_BRAND_NAME,
   NODE_ENV: process.env.NODE_ENV,
   DATABASE_URL: process.env.DATABASE_URL,
+  DIRECT_URL: process.env.DIRECT_URL,
   AUTH0_SECRET: process.env.AUTH0_SECRET,
   AUTH0_BASE_URL: process.env.AUTH0_BASE_URL,
   AUTH0_ISSUER_BASE_URL: process.env.AUTH0_ISSUER_BASE_URL,

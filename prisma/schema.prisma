@@ -6,44 +6,146 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  auth0Id       String    @unique
+  email         String    @unique
+  name          String?
+  image         String?
+  orders        Order[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String?
+  image       String?
+  active      Boolean   @default(true)
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Collection {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String?
+  image       String?
+  active      Boolean   @default(true)
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  name        String
-  category    String
-  priceCents  Int      // Better to store cents as integer
-  currency    String   @default("USD")
-  description String
-  sizes       String[]
-  stock       Int      @default(0)
-  image       String
-  gallery     String[]
-  active      Boolean  @default(true)
-  featured    Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String           @id @default(cuid())
+  slug         String           @unique
+  name         String
+  description  String
+  priceCents   Int              // Base price in cents
+  currency     String           @default("USD")
+  image        String           // Primary image
+  gallery      String[]         // Additional images
+  active       Boolean          @default(true)
+  featured     Boolean          @default(false)
+  
+  // Relations
+  categoryId   String?
+  category     Category?        @relation(fields: [categoryId], references: [id])
+  collectionId String?
+  collection   Collection?      @relation(fields: [collectionId], references: [id])
+  variants     ProductVariant[]
+  orderItems   OrderItem[]
+
+  // Legacy/Simple support (can be synchronized with variants)
+  sizes        String[]
+  stock        Int              @default(0)
+  
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+model ProductVariant {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size       String
+  stock      Int      @default(0)
+  sku        String?  @unique
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([productId, size])
 }
 
 model Order {
-  id                    String   @id @default(cuid())
-  stripeCheckoutSessionId String @unique
-  stripePaymentIntentId String?  @unique
+  id                    String      @id @default(cuid())
+  orderNumber           Int         @unique @default(autoincrement())
+  
+  // Stripe identifiers
+  stripeCheckoutSessionId String    @unique
+  stripePaymentIntentId   String?   @unique
+  
+  // Customer info
   customerEmail         String
+  userId                String?
+  user                  User?       @relation(fields: [userId], references: [id])
+  
+  // Financial info
   totalCents            Int
   subtotalCents         Int
-  currency              String   @default("USD")
-  status                String   @default("pending") // pending, paid, shipped, cancelled
-  items                 Json     // Array of items { productId, quantity, size, priceCents }
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  taxCents              Int         @default(0)
+  shippingCents         Int         @default(0)
+  currency              String      @default("USD")
+  
+  // Status
+  status                String      @default("pending") // pending, paid, processing, shipped, delivered, cancelled, refunded
+  
+  // Items
+  items                 Json        // Snapshot for easy access
+  orderItems            OrderItem[] // Structured relations
+  
+  // Shipping Address (Snapshot from Stripe)
+  shippingAddress       Json?
+  
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+}
+
+model OrderItem {
+  id         String   @id @default(cuid())
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+  
+  quantity   Int
+  size       String
+  priceCents Int      // Price at time of purchase
+  
+  createdAt  DateTime @default(now())
+}
+
+model StripeEvent {
+  id               String   @id @default(cuid())
+  stripeEventId    String   @unique
+  type             String
+  processed        Boolean  @default(false)
+  createdAt        DateTime @default(now())
 }
 
 model AdminAuditLog {
-  id        String   @id @default(cuid())
+  id         String   @id @default(cuid())
   adminEmail String
-  action    String
-  details   Json
-  createdAt DateTime @default(now())
+  action     String
+  details    Json
+  createdAt  DateTime @default(now())
 }

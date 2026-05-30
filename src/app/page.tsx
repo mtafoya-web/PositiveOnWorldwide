@@ -5,16 +5,7 @@ const Hero3D = dynamic(() => import("@/components/three/hero-3d"), { ssr: false 
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col relative bg-brand-dark overflow-hidden">
-      <header className="relative z-10 w-full py-6 px-8 flex justify-between items-center border-b border-gray-800/50 backdrop-blur-md">
-        <div className="font-bold text-xl tracking-tight text-white">POSITIVE ON WORLDWIDE</div>
-        <nav className="space-x-6 text-sm font-medium">
-          <Link href="/shop" className="text-gray-300 hover:text-white transition-colors">Shop</Link>
-          <Link href="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
-          <Link href="/api/auth/login" className="text-gray-300 hover:text-white transition-colors">Login</Link>
-        </nav>
-      </header>
-
+    <main className="min-h-[calc(100vh-64px)] flex flex-col relative bg-brand-dark overflow-hidden">
       <section className="relative flex-1 flex flex-col items-center justify-center text-center px-4 py-20 z-10">
         <Hero3D />
         
