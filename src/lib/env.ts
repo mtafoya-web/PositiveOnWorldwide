@@ -4,10 +4,11 @@ const envSchema = z.object({
   // App
   NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
   NEXT_PUBLIC_BRAND_NAME: z.string().default("Positive On Worldwide"),
+  USE_MOCK_DATA: z.enum(["true", "false"]).optional(),
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 
   // Database
-  DATABASE_URL: z.string().url(),
+  DATABASE_URL: z.string().url().optional(),
   DIRECT_URL: z.string().url().optional(),
 
   // Auth0
@@ -28,11 +29,13 @@ const envSchema = z.object({
   
   // Admin
   ADMIN_EMAILS: z.string().min(1).optional().describe("Comma-separated list of admin emails"),
+  ADMIN_DEV_BYPASS: z.enum(["true", "false"]).optional(),
 });
 
 const processEnv = {
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NEXT_PUBLIC_BRAND_NAME: process.env.NEXT_PUBLIC_BRAND_NAME,
+  USE_MOCK_DATA: process.env.USE_MOCK_DATA,
   NODE_ENV: process.env.NODE_ENV,
   DATABASE_URL: process.env.DATABASE_URL,
   DIRECT_URL: process.env.DIRECT_URL,
@@ -49,12 +52,13 @@ const processEnv = {
   STRIPE_SUCCESS_URL: process.env.STRIPE_SUCCESS_URL,
   STRIPE_CANCEL_URL: process.env.STRIPE_CANCEL_URL,
   ADMIN_EMAILS: process.env.ADMIN_EMAILS,
+  ADMIN_DEV_BYPASS: process.env.ADMIN_DEV_BYPASS,
 };
 
 const parsedEnv = envSchema.safeParse(processEnv);
 
 if (!parsedEnv.success) {
-  console.error("❌ Invalid environment variables:", parsedEnv.error.format());
+  console.error("Invalid environment variables:", parsedEnv.error.format());
   throw new Error("Invalid environment variables. Check the server logs.");
 }
 

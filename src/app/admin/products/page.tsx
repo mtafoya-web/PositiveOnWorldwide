@@ -1,16 +1,10 @@
-import { prisma } from "@/lib/db";
 import { formatCurrency } from "@/lib/utils";
+import { getAdminProducts } from "@/lib/storefront-data";
 import Link from "next/link";
-import { Plus, Package, ShoppingBag, Eye, Edit } from "lucide-react";
+import { Plus, Package, Eye, Edit } from "lucide-react";
 
 export default async function AdminProductsPage() {
-  const products = await prisma.product.findMany({
-    include: {
-      category: true,
-      variants: true,
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  const products = await getAdminProducts();
 
   return (
     <div className="p-12 max-w-7xl mx-auto">

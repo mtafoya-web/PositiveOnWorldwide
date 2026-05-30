@@ -3,22 +3,42 @@
 import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useCart } from "@/components/store/cart-provider";
-import { ShoppingBag } from "lucide-react";
+import { BarChart3, ShoppingBag } from "lucide-react";
 
-export function SiteHeader() {
+export function SiteHeader({
+  brandName,
+  logoUrl,
+  announcement,
+}: {
+  brandName: string;
+  logoUrl: string;
+  announcement?: string;
+}) {
   const { user } = useUser();
   const { totalItems } = useCart();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-black/80 backdrop-blur-md">
+      {announcement && (
+        <div className="bg-[var(--brand-primary)] px-4 py-2 text-center text-[10px] font-black uppercase tracking-[0.24em] text-black">
+          {announcement}
+        </div>
+      )}
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="font-bold text-xl tracking-tighter text-white">
-          POSITIVE ON WORLDWIDE
+        <Link href="/" className="flex items-center gap-3 font-bold text-lg tracking-tighter text-white">
+          <img src={logoUrl} alt="" className="h-8 w-8" />
+          <span>{brandName.toUpperCase()}</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+          <Link href="/" className="text-gray-400 hover:text-white transition-colors">
+            HOME
+          </Link>
           <Link href="/shop" className="text-gray-400 hover:text-white transition-colors">
             SHOP
+          </Link>
+          <Link href="/cart" className="text-gray-400 hover:text-white transition-colors">
+            CART
           </Link>
           <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
             ABOUT
@@ -30,6 +50,12 @@ export function SiteHeader() {
               </Link>
               <Link href="/profile" className="text-gray-400 hover:text-white transition-colors">
                 PROFILE
+              </Link>
+              <Link href="/admin" className="text-gray-400 hover:text-white transition-colors">
+                ADMIN
+              </Link>
+              <Link href="/admin/analytics" className="text-gray-400 hover:text-white transition-colors" aria-label="Admin analytics">
+                <BarChart3 className="h-4 w-4" />
               </Link>
               <Link
                 href="/api/auth/logout"

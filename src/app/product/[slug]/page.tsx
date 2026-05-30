@@ -1,11 +1,8 @@
-import { prisma } from "@/lib/db";
 import ProductDetailClient from "@/components/store/product-detail-client";
+import { getProductBySlug } from "@/lib/storefront-data";
 
 export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
-  const product = await prisma.product.findUnique({
-    where: { slug: params.slug },
-    include: { variants: true }
-  });
+  const product = await getProductBySlug(params.slug);
 
   if (!product) {
     return (

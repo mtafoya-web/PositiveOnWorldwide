@@ -1,0 +1,74 @@
+{
+  "content": {
+    "brandName": "Positive On Worldwide",
+    "logoUrl": "/brand-mark.svg",
+    "faviconUrl": "/brand-mark.svg",
+    "primaryColor": "#d9ff4f",
+    "backgroundColor": "#050505",
+    "announcement": "Worldwide shipping available on the current drop.",
+    "heroTitle": "Wear the Energy. Spread the Movement.",
+    "heroCopy": "Premium streetwear built for people who move with purpose, confidence, and positive energy everywhere they go.",
+    "heroPrimaryCtaLabel": "Shop the Drop",
+    "heroPrimaryCtaHref": "/shop",
+    "heroSecondaryCtaLabel": "Explore the Brand",
+    "heroSecondaryCtaHref": "/about",
+    "seoTitle": "Positive On Worldwide",
+    "seoDescription": "Premium worldwide streetwear built for positive energy, purpose, and movement.",
+    "contactEmail": "support@positiveonworldwide.com",
+    "instagramUrl": "https://instagram.com",
+    "tiktokUrl": "https://tiktok.com",
+    "twitterUrl": "https://twitter.com",
+    "freeShippingThresholdCents": 15000,
+    "flatShippingCents": 1200,
+    "taxNote": "Taxes calculated at checkout.",
+    "sections": [
+      {
+        "title": "Drop Calendar",
+        "copy": "Seasonal capsules release in focused runs, keeping the catalog intentional."
+      },
+      {
+        "title": "Materials",
+        "copy": "Heavy cotton, brushed fleece, and durable trims selected for daily wear."
+      },
+      {
+        "title": "Fulfillment",
+        "copy": "Shipping, returns, privacy, and terms pages are ready for final policy copy."
+      }
+    ]
+  },
+  "categories": [
+    {
+      "id": "cat-fleece",
+      "slug": "fleece",
+      "name": "Fleece",
+      "description": "Heavyweight hoodies and crews.",
+      "image": "",
+      "active": true,
+      "createdAt": "2026-01-08T10:00:00.000Z",
+      "updatedAt": "2026-01-08T10:00:00.000Z"
+    },
+    {
+      "id": "cat-tees",
+      "slug": "tees",
+      "name": "Tees",
+      "description": "Structured cotton essentials.",
+      "image": "",
+      "active": true,
+      "createdAt": "2026-01-08T10:00:00.000Z",
+      "updatedAt": "2026-01-08T10:00:00.000Z"
+    }
+  ],
+  "collections": [
+    {
+      "id": "col-worldwide",
+      "slug": "worldwide",
+      "name": "Worldwide",
+      "description": "Core positive energy essentials.",
+      "image": "",
+      "active": true,
+      "createdAt": "2026-01-08T10:00:00.000Z",
+      "updatedAt": "2026-01-08T10:00:00.000Z"
+    }
+  ],
+  "products": []
+}

@@ -38,7 +38,7 @@ export default function ProductDetailClient({ product }: { product: any }) {
       <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-8">
         <span>Shop</span>
         <ChevronRight className="w-3 h-3" />
-        <span>{product.category}</span>
+        <span>{product.category?.name || "Apparel"}</span>
         <ChevronRight className="w-3 h-3" />
         <span className="text-white">{product.name}</span>
       </div>

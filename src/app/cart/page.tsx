@@ -4,34 +4,9 @@ import { useCart } from "@/components/store/cart-provider";
 import { formatCurrency } from "@/lib/utils";
 import Link from "next/link";
 import { Trash2, Plus, Minus, ArrowRight } from "lucide-react";
-import { useState } from "react";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalAmountCents, totalItems } = useCart();
-  const [isRedirecting, setIsRedirecting] = useState(false);
-
-  const handleCheckout = async () => {
-    setIsRedirecting(true);
-    try {
-      const response = await fetch("/api/checkout/sessions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: items.map(i => ({ id: i.id, size: i.size, quantity: i.quantity }))
-        }),
-      });
-      const data = await response.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error(data.error || "Failed to create checkout session");
-      }
-    } catch (error) {
-      console.error("Checkout error:", error);
-      alert("Checkout failed. Please try again.");
-      setIsRedirecting(false);
-    }
-  };
 
   if (items.length === 0) {
     return (
@@ -125,18 +100,13 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <button 
-                onClick={handleCheckout}
-                disabled={isRedirecting}
-                className="w-full py-5 bg-white text-black font-black uppercase tracking-widest text-sm rounded-xl hover:bg-neutral-200 transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group"
+              <Link
+                href="/checkout"
+                className="w-full py-5 bg-white text-black font-black uppercase tracking-widest text-sm rounded-xl hover:bg-neutral-200 transition-all flex items-center justify-center gap-3 group"
               >
-                {isRedirecting ? "Processing..." : (
-                  <>
-                    Secure Checkout
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </>
-                )}
-              </button>
+                Secure Checkout
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
               
               <p className="mt-6 text-center text-gray-600 text-[9px] font-bold uppercase tracking-widest leading-relaxed">
                 Taxes and shipping are calculated by Stripe in the next step. 

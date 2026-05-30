@@ -1,19 +1,9 @@
-import { prisma } from "@/lib/db";
 import { formatCurrency } from "@/lib/utils";
+import { getOrders } from "@/lib/storefront-data";
 import { Package, CheckCircle2, Clock } from "lucide-react";
 
 export default async function AdminOrdersPage() {
-  const orders = await prisma.order.findMany({
-    include: {
-      user: true,
-      orderItems: {
-        include: {
-          product: true
-        }
-      }
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  const orders = await getOrders();
 
   return (
     <div className="p-12 max-w-7xl mx-auto">

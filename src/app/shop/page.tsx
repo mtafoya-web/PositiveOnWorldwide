@@ -1,15 +1,11 @@
-import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
+import { getProducts } from "@/lib/storefront-data";
 
 export const dynamic = "force-dynamic";
 
 export default async function ShopPage() {
-  const products = await prisma.product.findMany({
-    where: { active: true },
-    include: { category: true },
-    orderBy: { createdAt: "desc" },
-  });
+  const products = await getProducts();
 
   return (
     <main className="min-h-screen bg-black">

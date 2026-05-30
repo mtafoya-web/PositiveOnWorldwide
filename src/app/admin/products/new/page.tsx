@@ -1,10 +1,16 @@
+import { ProductForm } from "@/components/admin/product-form";
+import { createProduct } from "@/server/actions/products";
+
 export default function AdminProductNewPage() {
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-black uppercase tracking-tighter mb-8">Add New Product</h1>
-      <div className="border border-gray-800 rounded-2xl p-8 text-center text-gray-500">
-        New product form coming soon.
-      </div>
+    <div className="mx-auto max-w-5xl p-8 md:p-12">
+      <header className="mb-10">
+        <h1 className="text-4xl font-black uppercase tracking-tighter">Add Product</h1>
+        <p className="mt-3 text-sm text-gray-500">
+          Create products, images, pricing, inventory, status, and featured placement from the admin.
+        </p>
+      </header>
+      <ProductForm action={createProduct} />
     </div>
   );
 }

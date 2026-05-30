@@ -1,8 +1,9 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { prisma } from "@/lib/db";
 import { formatCurrency } from "@/lib/utils";
-import { ArrowRight, Instagram, ShoppingBag } from "lucide-react";
+import { getFeaturedProducts } from "@/lib/storefront-data";
+import { getStoreContent } from "@/lib/content-store";
+import { ArrowRight, Globe2, Instagram, ShieldCheck, Sparkles, Truck } from "lucide-react";
 
 const Hero3D = dynamic(() => import("@/components/three/hero-3d"), { 
   ssr: false,
@@ -10,10 +11,11 @@ const Hero3D = dynamic(() => import("@/components/three/hero-3d"), {
 });
 
 export default async function Home() {
-  const featuredProducts = await prisma.product.findMany({
-    where: { active: true, featured: true },
-    take: 3,
-  });
+  const [featuredProducts, content] = await Promise.all([
+    getFeaturedProducts(3),
+    getStoreContent(),
+  ]);
+  const [heroLead, ...heroRest] = content.heroTitle.split(". ");
 
   return (
     <main className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
@@ -23,26 +25,26 @@ export default async function Home() {
         
         <div className="relative z-10 max-w-4xl mx-auto pointer-events-none">
           <h1 className="text-5xl md:text-8xl font-black tracking-tighter uppercase mb-6 drop-shadow-2xl italic leading-[0.9]">
-            Wear the Energy.<br />
+            {heroLead}<br />
             <span className="text-transparent border-t-white border-b-white py-2" style={{ WebkitTextStroke: '1px white' }}>
-              Spread the Movement.
+              {heroRest.join(". ") || content.brandName}
             </span>
           </h1>
           <p className="text-lg md:text-xl text-gray-400 max-w-2xl mb-12 mx-auto font-medium tracking-tight px-4">
-            Positive On Worldwide is built for people who move with purpose, confidence, and positive energy everywhere they go.
+            {content.heroCopy}
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-6 pointer-events-auto">
             <Link 
-              href="/shop" 
+              href={content.heroPrimaryCtaHref}
               className="px-12 py-5 bg-white text-black font-black uppercase tracking-[0.2em] text-xs rounded-full hover:bg-neutral-200 transition-all duration-500 hover:-translate-y-1 shadow-2xl shadow-white/10"
             >
-              Shop the Drop
+              {content.heroPrimaryCtaLabel}
             </Link>
             <Link 
-              href="/about" 
+              href={content.heroSecondaryCtaHref}
               className="px-12 py-5 bg-transparent border border-white/20 text-white font-black uppercase tracking-[0.2em] text-xs rounded-full hover:bg-white/5 hover:border-white transition-all duration-500"
             >
-              Explore the Brand
+              {content.heroSecondaryCtaLabel}
             </Link>
           </div>
         </div>
@@ -51,6 +53,24 @@ export default async function Home() {
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50">
           <span className="text-[9px] font-black uppercase tracking-[0.5em] -rotate-90 origin-center mb-8">Scroll</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent" />
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-white text-black">
+        <div className="container mx-auto grid grid-cols-1 gap-6 px-4 py-8 md:grid-cols-3">
+          {[
+            { icon: Globe2, label: "Worldwide shipping", copy: "Built for a global community." },
+            { icon: ShieldCheck, label: "Secure checkout", copy: "Stripe-powered payment flow." },
+            { icon: Sparkles, label: "Limited drops", copy: "Focused capsules with premium materials." },
+          ].map((item) => (
+            <div key={item.label} className="flex items-center gap-4">
+              <item.icon className="h-6 w-6 flex-shrink-0" />
+              <div>
+                <h2 className="text-xs font-black uppercase tracking-[0.22em]">{item.label}</h2>
+                <p className="text-sm font-medium text-black/60">{item.copy}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -93,7 +113,7 @@ export default async function Home() {
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] -mr-64 -mt-64" />
         <div className="container mx-auto px-4 max-w-4xl text-center relative z-10">
           <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-12 italic leading-tight">
-            Positive On Worldwide is more than clothing. It is a mindset — stay positive, move with purpose.
+            {content.brandName} is more than clothing. It is a mindset: stay positive, move with purpose.
           </h2>
           <Link 
             href="/about" 
@@ -116,7 +136,7 @@ export default async function Home() {
             </p>
           </div>
           <a 
-            href="https://instagram.com" 
+            href={content.instagramUrl || "https://instagram.com"}
             target="_blank"
             className="flex-shrink-0 w-24 h-24 bg-black text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-500"
           >
@@ -125,11 +145,23 @@ export default async function Home() {
         </div>
       </section>
 
+      <section className="container mx-auto px-4 pb-32">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {content.sections.map(({ title, copy }) => (
+            <div key={title} className="border border-white/10 bg-neutral-950 p-8">
+              <Truck className="mb-8 h-6 w-6 text-lime-300" />
+              <h3 className="mb-4 text-xl font-black uppercase tracking-tight">{title}</h3>
+              <p className="text-sm leading-6 text-gray-400">{copy}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="py-20 border-t border-gray-900 px-4">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-24 mb-20">
           <div className="md:col-span-2">
-            <div className="font-black text-3xl tracking-tighter uppercase italic mb-8">Positive On Worldwide</div>
+            <div className="font-black text-3xl tracking-tighter uppercase italic mb-8">{content.brandName}</div>
             <p className="text-gray-500 max-w-sm font-medium tracking-tight text-sm">
               Premium streetwear for the purpose-driven individual. Designed to carry energy across borders.
             </p>
@@ -152,11 +184,11 @@ export default async function Home() {
           </div>
         </div>
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-[9px] font-black uppercase tracking-[0.4em] text-gray-600">
-          <p>© 2026 Positive On Worldwide. All Rights Reserved.</p>
+          <p>Copyright 2026 {content.brandName}. All Rights Reserved.</p>
           <div className="flex gap-8">
-            <a href="#" className="hover:text-white transition-colors">Instagram</a>
-            <a href="#" className="hover:text-white transition-colors">Twitter</a>
-            <a href="#" className="hover:text-white transition-colors">TikTok</a>
+            <a href={content.instagramUrl || "#"} className="hover:text-white transition-colors">Instagram</a>
+            <a href={content.twitterUrl || "#"} className="hover:text-white transition-colors">Twitter</a>
+            <a href={content.tiktokUrl || "#"} className="hover:text-white transition-colors">TikTok</a>
           </div>
         </div>
       </footer>
