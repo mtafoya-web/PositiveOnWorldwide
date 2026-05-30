@@ -13,6 +13,10 @@ export async function POST(req: NextRequest) {
 
   let event;
 
+  if (!env.STRIPE_WEBHOOK_SECRET) {
+    return NextResponse.json({ error: "STRIPE_WEBHOOK_SECRET not configured" }, { status: 500 });
+  }
+
   try {
     event = stripe.webhooks.constructEvent(
       body,
@@ -24,37 +28,86 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 
+  // Idempotency check: Have we processed this event already?
+  const existingEvent = await prisma.stripeEvent.findUnique({
+    where: { stripeEventId: event.id }
+  });
+
+  if (existingEvent) {
+    return NextResponse.json({ received: true, duplicate: true });
+  }
+
+  await prisma.stripeEvent.create({
+    data: {
+      stripeEventId: event.id,
+      type: event.type
+    }
+  });
+
   try {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as any;
-        
-        await prisma.order.update({
-          where: { stripeCheckoutSessionId: session.id },
-          data: {
-            status: "paid",
-            customerEmail: session.customer_details?.email || "",
-            stripePaymentIntentId: session.payment_intent as string,
-          },
-        });
+        const items = JSON.parse(session.metadata.items);
+        const userId = session.metadata.userId;
 
-        // Deduct inventory
-        const order = await prisma.order.findUnique({ where: { stripeCheckoutSessionId: session.id } });
-        if (order && Array.isArray(order.items)) {
-          for (const item of order.items as any[]) {
-            if (item.productId) {
-              await prisma.product.update({
-                where: { id: item.productId },
-                data: { stock: { decrement: item.quantity } }
-              });
+        // Create the order in the database
+        const order = await prisma.order.create({
+          data: {
+            stripeCheckoutSessionId: session.id,
+            stripePaymentIntentId: session.payment_intent as string,
+            customerEmail: session.customer_details?.email || "",
+            userId: userId,
+            totalCents: session.amount_total,
+            subtotalCents: session.amount_subtotal,
+            currency: session.currency.toUpperCase(),
+            status: "paid",
+            items: items, // Snapshot of items
+            shippingAddress: session.shipping_details || {},
+            orderItems: {
+              create: items.map((item: any) => ({
+                productId: item.id,
+                quantity: item.quantity,
+                size: item.size,
+                priceCents: 0, // In a real app, you'd fetch the exact price at checkout time
+              }))
             }
           }
+        });
+
+        // Deduct inventory from VARIANTS (specific sizes)
+        for (const item of items) {
+          await prisma.productVariant.update({
+            where: {
+              productId_size: {
+                productId: item.id,
+                size: item.size
+              }
+            },
+            data: {
+              stock: { decrement: item.quantity }
+            }
+          });
+          
+          // Also sync root product aggregate stock for fallback
+          await prisma.product.update({
+            where: { id: item.id },
+            data: {
+              stock: { decrement: item.quantity }
+            }
+          });
         }
         break;
       }
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
+
+    // Mark event as processed
+    await prisma.stripeEvent.update({
+      where: { stripeEventId: event.id },
+      data: { processed: true }
+    });
 
     return NextResponse.json({ received: true });
   } catch (error: any) {

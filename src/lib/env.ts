@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const envSchema = z.object({
   // App
-  NEXT_PUBLIC_SITE_URL: z.string().url(),
+  NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
   NEXT_PUBLIC_BRAND_NAME: z.string().default("Positive On Worldwide"),
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 
@@ -11,23 +11,23 @@ const envSchema = z.object({
   DIRECT_URL: z.string().url().optional(),
 
   // Auth0
-  AUTH0_SECRET: z.string().min(1),
-  AUTH0_BASE_URL: z.string().url(),
-  AUTH0_ISSUER_BASE_URL: z.string().url(),
-  AUTH0_CLIENT_ID: z.string().min(1),
-  AUTH0_CLIENT_SECRET: z.string().min(1),
+  AUTH0_SECRET: z.string().min(1).optional(),
+  AUTH0_BASE_URL: z.string().url().optional(),
+  AUTH0_ISSUER_BASE_URL: z.string().url().optional(),
+  AUTH0_CLIENT_ID: z.string().min(1).optional(),
+  AUTH0_CLIENT_SECRET: z.string().min(1).optional(),
   NEXT_PUBLIC_AUTH0_DOMAIN: z.string().min(1).optional(),
   NEXT_PUBLIC_AUTH0_CLIENT_ID: z.string().min(1).optional(),
 
   // Stripe
-  STRIPE_SECRET_KEY: z.string().min(1),
-  STRIPE_WEBHOOK_SECRET: z.string().min(1),
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
-  STRIPE_SUCCESS_URL: z.string().url(),
-  STRIPE_CANCEL_URL: z.string().url(),
+  STRIPE_SECRET_KEY: z.string().min(1).optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().min(1).optional(),
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1).optional(),
+  STRIPE_SUCCESS_URL: z.string().url().optional(),
+  STRIPE_CANCEL_URL: z.string().url().optional(),
   
   // Admin
-  ADMIN_EMAILS: z.string().min(1).describe("Comma-separated list of admin emails"),
+  ADMIN_EMAILS: z.string().min(1).optional().describe("Comma-separated list of admin emails"),
 });
 
 const processEnv = {

@@ -21,7 +21,7 @@ export async function isAdmin() {
   const user = await getCurrentUser();
   if (!user || !user.email) return false;
 
-  const adminEmails = env.ADMIN_EMAILS.split(",")
+  const adminEmails = (env.ADMIN_EMAILS || "").split(",")
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean);
 

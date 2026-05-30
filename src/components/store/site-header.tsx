@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { cn } from "@/lib/utils";
+import { useCart } from "@/components/store/cart-provider";
+import { ShoppingBag } from "lucide-react";
 
 export function SiteHeader() {
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
+  const { totalItems } = useCart();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-black/80 backdrop-blur-md">
@@ -44,9 +46,16 @@ export function SiteHeader() {
               LOGIN
             </Link>
           )}
+          
+          <Link href="/cart" className="relative text-gray-400 hover:text-white transition-colors">
+            <ShoppingBag className="w-5 h-5" />
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-white text-black text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
+          </Link>
         </nav>
-
-        {/* Mobile menu could go here */}
       </div>
     </header>
   );

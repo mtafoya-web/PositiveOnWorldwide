@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 const productSchema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1),
-  category: z.string().min(1),
+  categoryId: z.string().min(1).optional(),
   priceCents: z.number().min(0),
   description: z.string().min(1),
   sizes: z.array(z.string()),
@@ -24,7 +24,7 @@ export async function createProduct(formData: FormData) {
   const data = {
     name: formData.get("name") as string,
     slug: formData.get("slug") as string,
-    category: formData.get("category") as string,
+    categoryId: formData.get("categoryId") as string || undefined,
     priceCents: parseInt(formData.get("priceCents") as string, 10),
     description: formData.get("description") as string,
     sizes: (formData.get("sizes") as string).split(",").map((s) => s.trim()),
@@ -37,7 +37,10 @@ export async function createProduct(formData: FormData) {
   const parsed = productSchema.parse(data);
 
   await prisma.product.create({
-    data: parsed,
+    data: {
+      ...parsed,
+      categoryId: parsed.categoryId,
+    },
   });
 
   revalidatePath("/admin/products");

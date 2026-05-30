@@ -2,63 +2,73 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/db";
 import { env } from "@/lib/env";
+import { auth0 } from "@/lib/auth0";
 
 export async function POST(req: NextRequest) {
   try {
-    const formData = await req.formData();
-    const productId = formData.get("productId") as string;
+    const session = await auth0.getSession();
+    const user = session?.user;
+    
+    // Expecting JSON payload: { items: [{ id: string, size: string, quantity: number }] }
+    const { items } = await req.json();
 
-    if (!productId) {
-      return NextResponse.json({ error: "Missing productId" }, { status: 400 });
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
     }
 
-    const product = await prisma.product.findUnique({ where: { id: productId } });
+    // Resolve products from DB to get TRUSTED prices
+    const productIds = items.map(item => item.id);
+    const dbProducts = await prisma.product.findMany({
+      where: {
+        id: { in: productIds },
+        active: true
+      },
+      include: {
+        variants: true
+      }
+    });
 
-    if (!product || !product.active || product.stock <= 0) {
-      return NextResponse.json({ error: "Product unavailable" }, { status: 400 });
-    }
+    const lineItems = items.map(item => {
+      const dbProduct = dbProducts.find(p => p.id === item.id);
+      if (!dbProduct) throw new Error(`Product ${item.id} not found`);
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price_data: {
-            currency: product.currency.toLowerCase(),
-            product_data: {
-              name: product.name,
-              images: [product.image],
-            },
-            unit_amount: product.priceCents,
+      // Verify stock for specific variant
+      const variant = dbProduct.variants.find(v => v.size === item.size);
+      if (!variant || variant.stock < item.quantity) {
+        throw new Error(`Insufficient stock for ${dbProduct.name} in size ${item.size}`);
+      }
+
+      return {
+        price_data: {
+          currency: dbProduct.currency.toLowerCase(),
+          product_data: {
+            name: `${dbProduct.name} - ${item.size}`,
+            images: [dbProduct.image],
+            metadata: {
+              productId: dbProduct.id,
+              size: item.size
+            }
           },
-          quantity: 1,
+          unit_amount: dbProduct.priceCents,
         },
-      ],
+        quantity: item.quantity,
+      };
+    });
+
+    const stripeSession = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: lineItems,
       mode: "payment",
       success_url: env.STRIPE_SUCCESS_URL,
       cancel_url: env.STRIPE_CANCEL_URL,
+      customer_email: user?.email,
       metadata: {
-        productId: product.id,
+        userId: user?.sub || null,
+        items: JSON.stringify(items.map(i => ({ id: i.id, size: i.size, quantity: i.quantity })))
       },
     });
 
-    if (!session.url) {
-      throw new Error("Failed to create Stripe session URL");
-    }
-
-    // Pre-create the order as pending
-    await prisma.order.create({
-      data: {
-        stripeCheckoutSessionId: session.id,
-        customerEmail: "", // Will be filled by webhook
-        totalCents: product.priceCents,
-        subtotalCents: product.priceCents,
-        currency: product.currency,
-        status: "pending",
-        items: [{ productId: product.id, quantity: 1, size: "Default", priceCents: product.priceCents }],
-      },
-    });
-
-    return NextResponse.redirect(session.url, 303);
+    return NextResponse.json({ url: stripeSession.url });
   } catch (error: any) {
     console.error("Stripe Checkout Error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
