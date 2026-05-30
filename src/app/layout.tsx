@@ -5,6 +5,7 @@ import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { SiteHeader } from "@/components/store/site-header";
 import { CartProvider } from "@/components/store/cart-provider";
 import { getStoreContent } from "@/lib/content-store";
+import { getConfiguredSiteUrl } from "@/lib/runtime-urls";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const content = await getStoreContent();
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+    metadataBase: new URL(getConfiguredSiteUrl() || "http://localhost:3000"),
     title: {
       default: content.seoTitle,
       template: `%s | ${content.brandName}`,

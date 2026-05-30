@@ -6,16 +6,16 @@ export default async function AdminOrdersPage() {
   const orders = await getOrders();
 
   return (
-    <div className="p-12 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-8 md:p-12 max-w-7xl mx-auto">
       <header className="mb-12">
-        <h1 className="text-5xl font-black uppercase tracking-tighter italic mb-2">Orders</h1>
+          <h1 className="text-4xl font-black uppercase tracking-tighter italic mb-2 sm:text-5xl">Orders</h1>
         <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px]">Track and fulfill customer energy</p>
       </header>
 
       <div className="space-y-6">
         {orders.map((order) => (
           <div key={order.id} className="bg-neutral-900/50 border border-gray-800 rounded-3xl overflow-hidden group hover:border-white transition-colors duration-500">
-            <div className="p-8 flex flex-col md:flex-row justify-between gap-8">
+            <div className="p-4 sm:p-8 flex flex-col md:flex-row justify-between gap-8">
               <div className="flex-1">
                 <div className="flex items-center gap-4 mb-4">
                   <span className="text-xs font-black uppercase tracking-[0.2em] text-white">#{order.orderNumber}</span>

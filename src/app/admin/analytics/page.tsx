@@ -9,15 +9,15 @@ export default async function AdminAnalyticsPage() {
   const maxSales = Math.max(...Object.values(metrics.salesByDate), 1);
 
   return (
-    <div className="mx-auto max-w-7xl space-y-10 p-8 md:p-12">
+    <div className="mx-auto max-w-7xl space-y-8 p-4 sm:p-8 md:space-y-10 md:p-12">
       <header className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
-          <h1 className="text-5xl font-black uppercase tracking-tighter italic">Analytics</h1>
+          <h1 className="text-4xl font-black uppercase tracking-tighter italic sm:text-5xl">Analytics</h1>
           <p className="mt-3 text-xs font-bold uppercase tracking-[0.24em] text-gray-500">
             Sales insight, customer activity, and storefront performance
           </p>
         </div>
-        <div className="border border-lime-300/30 bg-lime-300/10 px-4 py-3 text-xs font-bold text-lime-100">
+        <div className="border border-lime-300/30 bg-lime-300/10 px-4 py-3 text-xs font-bold leading-5 text-lime-100">
           {MOCK_DATA_NOTICE}
         </div>
       </header>
@@ -38,14 +38,14 @@ export default async function AdminAnalyticsPage() {
       </section>
 
       <section className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_0.8fr]">
-        <div className="border border-gray-800 bg-neutral-900/50 p-8">
-          <div className="mb-8 flex items-center justify-between">
+        <div className="border border-gray-800 bg-neutral-900/50 p-4 sm:p-8">
+          <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="text-xl font-black uppercase tracking-tight">Sales by Date</h2>
             <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-gray-500">Last activity</span>
           </div>
           <div className="space-y-4">
             {Object.entries(metrics.salesByDate).map(([date, value]) => (
-              <div key={date} className="grid grid-cols-[7rem_1fr_6rem] items-center gap-4">
+              <div key={date} className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-[6.5rem_1fr_5.5rem] min-[420px]:items-center min-[420px]:gap-3 sm:grid-cols-[7rem_1fr_6rem] sm:gap-4">
                 <span className="text-xs font-bold text-gray-500">{date}</span>
                 <div className="h-3 bg-black">
                   <div
@@ -53,13 +53,13 @@ export default async function AdminAnalyticsPage() {
                     style={{ width: `${Math.max(8, (value / maxSales) * 100)}%` }}
                   />
                 </div>
-                <span className="text-right text-xs font-black">{formatCurrency(value)}</span>
+                <span className="text-left text-xs font-black min-[420px]:text-right">{formatCurrency(value)}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="border border-gray-800 bg-neutral-900/50 p-8">
+        <div className="border border-gray-800 bg-neutral-900/50 p-4 sm:p-8">
           <h2 className="mb-8 text-xl font-black uppercase tracking-tight">Top Products</h2>
           <div className="space-y-6">
             {metrics.topProducts.map(({ product, units }) => (
@@ -71,7 +71,7 @@ export default async function AdminAnalyticsPage() {
                   <p className="text-sm font-black uppercase tracking-tight">{product.name}</p>
                   <p className="text-xs text-gray-500">{formatCurrency(product.priceCents, product.currency)}</p>
                 </div>
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-lime-300">{units} sold</p>
+                <p className="text-right text-xs font-black uppercase tracking-[0.14em] text-lime-300 sm:tracking-[0.2em]">{units} sold</p>
               </div>
             ))}
           </div>
@@ -82,7 +82,7 @@ export default async function AdminAnalyticsPage() {
         <div className="border-b border-gray-800 p-6">
           <h2 className="text-xl font-black uppercase tracking-tight">Customer Activity</h2>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} aria-label="Customer activity table, scroll horizontally on small screens">
           <table className="w-full min-w-[720px] text-left">
             <thead className="text-[10px] font-black uppercase tracking-[0.24em] text-gray-500">
               <tr>

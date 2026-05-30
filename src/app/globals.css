@@ -17,7 +17,24 @@
   * {
     @apply border-gray-200 dark:border-gray-800;
   }
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
   body {
     @apply bg-brand-dark text-brand-light antialiased;
+  }
+  a,
+  button,
+  input,
+  textarea,
+  select {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black;
+  }
+  input,
+  textarea,
+  select {
+    font-size: 16px;
   }
 }

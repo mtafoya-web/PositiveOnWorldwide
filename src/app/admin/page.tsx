@@ -8,15 +8,15 @@ export default async function AdminOverview() {
   const metrics = await getDashboardMetrics();
 
   return (
-    <div className="mx-auto max-w-7xl space-y-10 p-8 md:p-12">
+    <div className="mx-auto max-w-7xl space-y-8 p-4 sm:p-8 md:space-y-10 md:p-12">
       <header className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
-          <h1 className="text-5xl font-black uppercase tracking-tighter italic">Dashboard</h1>
+          <h1 className="text-4xl font-black uppercase tracking-tighter italic sm:text-5xl">Dashboard</h1>
           <p className="mt-3 text-xs font-bold uppercase tracking-[0.24em] text-gray-500">
             Store operations and launch readiness
           </p>
         </div>
-        <Link href="/admin/analytics" className="bg-white px-6 py-3 text-xs font-black uppercase tracking-[0.22em] text-black">
+        <Link href="/admin/analytics" className="inline-flex min-h-12 items-center justify-center bg-white px-6 py-3 text-xs font-black uppercase tracking-[0.22em] text-black">
           View Analytics
         </Link>
       </header>
@@ -41,7 +41,7 @@ export default async function AdminOverview() {
       </div>
 
       <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="border border-gray-800 bg-neutral-900/50 p-8">
+        <div className="border border-gray-800 bg-neutral-900/50 p-4 sm:p-8">
           <h2 className="mb-6 text-xl font-black uppercase tracking-tight">Recent Orders</h2>
           <div className="space-y-4">
             {metrics.orders.slice(0, 4).map((order) => (
@@ -55,7 +55,7 @@ export default async function AdminOverview() {
             ))}
           </div>
         </div>
-        <div className="border border-gray-800 bg-neutral-900/50 p-8">
+        <div className="border border-gray-800 bg-neutral-900/50 p-4 sm:p-8">
           <h2 className="mb-6 text-xl font-black uppercase tracking-tight">Top Products</h2>
           <div className="space-y-4">
             {metrics.topProducts.map(({ product, units }) => (

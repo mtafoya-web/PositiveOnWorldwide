@@ -59,7 +59,7 @@ export function CheckoutClient({
   if (items.length === 0) {
     return (
       <main className="min-h-screen bg-black px-4 pb-24 pt-32 text-white">
-        <div className="mx-auto max-w-xl border border-dashed border-white/15 bg-neutral-950 p-10 text-center">
+        <div className="mx-auto max-w-xl border border-dashed border-white/15 bg-neutral-950 p-6 text-center sm:p-10">
           <ShoppingBag className="mx-auto mb-6 h-10 w-10 text-gray-600" />
           <h1 className="mb-4 text-4xl font-black uppercase tracking-tighter">Checkout</h1>
           <p className="mb-8 text-sm font-medium text-gray-400">
@@ -67,7 +67,7 @@ export function CheckoutClient({
           </p>
           <Link
             href="/shop"
-            className="inline-flex items-center justify-center bg-white px-8 py-4 text-xs font-black uppercase tracking-[0.22em] text-black hover:bg-neutral-200"
+            className="inline-flex min-h-12 items-center justify-center bg-white px-8 py-4 text-xs font-black uppercase tracking-[0.22em] text-black hover:bg-neutral-200"
           >
             Shop the Drop
           </Link>
@@ -81,7 +81,7 @@ export function CheckoutClient({
       <div className="container mx-auto max-w-6xl">
         <header className="mb-12 flex flex-col justify-between gap-4 border-b border-white/10 pb-8 md:flex-row md:items-end">
           <div>
-            <h1 className="text-5xl font-black uppercase tracking-tighter">Checkout</h1>
+            <h1 className="text-4xl font-black uppercase tracking-tighter sm:text-5xl">Checkout</h1>
             <p className="mt-3 text-sm font-medium text-gray-400">
               Review your order, then continue to secure Stripe Checkout.
             </p>
@@ -95,12 +95,12 @@ export function CheckoutClient({
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.4fr_0.8fr]">
           <section className="space-y-4">
             {items.map((item) => (
-              <article key={`${item.id}-${item.size}`} className="flex gap-5 border border-white/10 bg-neutral-950 p-5">
+              <article key={`${item.id}-${item.size}`} className="flex flex-col gap-4 border border-white/10 bg-neutral-950 p-4 min-[380px]:flex-row min-[380px]:gap-5 sm:p-5">
                 <div className="h-28 w-24 flex-shrink-0 overflow-hidden bg-black">
                   <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
                 </div>
                 <div className="flex flex-1 flex-col justify-between">
-                  <div className="flex justify-between gap-4">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:justify-between">
                     <div>
                       <h2 className="text-lg font-black uppercase tracking-tight">{item.name}</h2>
                       <p className="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
@@ -117,7 +117,7 @@ export function CheckoutClient({
             ))}
           </section>
 
-          <aside className="border border-white/10 bg-white p-8 text-black lg:sticky lg:top-28 lg:self-start">
+          <aside className="border border-white/10 bg-white p-6 text-black sm:p-8 lg:sticky lg:top-28 lg:self-start">
             <h2 className="mb-8 text-2xl font-black uppercase tracking-tight">Order Summary</h2>
             <div className="space-y-4 text-sm font-bold">
               <div className="flex justify-between">
@@ -154,7 +154,7 @@ export function CheckoutClient({
             <button
               onClick={startCheckout}
               disabled={isSubmitting}
-              className="flex w-full items-center justify-center gap-3 bg-black px-8 py-5 text-xs font-black uppercase tracking-[0.22em] text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex min-h-14 w-full items-center justify-center gap-3 bg-black px-8 py-5 text-xs font-black uppercase tracking-[0.22em] text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
               {isSubmitting ? "Starting checkout" : "Continue to Stripe"}

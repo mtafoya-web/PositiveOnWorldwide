@@ -53,7 +53,6 @@ export async function POST(req: NextRequest) {
       case "checkout.session.completed": {
         const session = event.data.object as any;
         const items = JSON.parse(session.metadata.items);
-        const userId = session.metadata.userId;
 
         // Create the order in the database
         const order = await prisma.order.create({
@@ -61,7 +60,6 @@ export async function POST(req: NextRequest) {
             stripeCheckoutSessionId: session.id,
             stripePaymentIntentId: session.payment_intent as string,
             customerEmail: session.customer_details?.email || "",
-            userId: userId,
             totalCents: session.amount_total,
             subtotalCents: session.amount_subtotal,
             currency: session.currency.toUpperCase(),
@@ -73,7 +71,7 @@ export async function POST(req: NextRequest) {
                 productId: item.id,
                 quantity: item.quantity,
                 size: item.size,
-                priceCents: 0, // In a real app, you'd fetch the exact price at checkout time
+                priceCents: item.priceCents || 0,
               }))
             }
           }

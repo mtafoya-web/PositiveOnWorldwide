@@ -20,11 +20,11 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
       {/* Hero Section */}
-      <section className="relative h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+      <section className="relative min-h-[calc(100svh-6rem)] flex flex-col items-center justify-center text-center px-4 py-16 overflow-hidden">
         <Hero3D />
         
         <div className="relative z-10 max-w-4xl mx-auto pointer-events-none">
-          <h1 className="text-5xl md:text-8xl font-black tracking-tighter uppercase mb-6 drop-shadow-2xl italic leading-[0.9]">
+          <h1 className="mx-auto max-w-[18rem] text-[1.75rem] min-[360px]:text-[2rem] sm:max-w-4xl sm:text-5xl md:text-8xl font-black tracking-tighter uppercase mb-6 drop-shadow-2xl italic leading-[0.92]">
             {heroLead}<br />
             <span className="text-transparent border-t-white border-b-white py-2" style={{ WebkitTextStroke: '1px white' }}>
               {heroRest.join(". ") || content.brandName}
@@ -36,13 +36,13 @@ export default async function Home() {
           <div className="flex flex-col sm:flex-row justify-center gap-6 pointer-events-auto">
             <Link 
               href={content.heroPrimaryCtaHref}
-              className="px-12 py-5 bg-white text-black font-black uppercase tracking-[0.2em] text-xs rounded-full hover:bg-neutral-200 transition-all duration-500 hover:-translate-y-1 shadow-2xl shadow-white/10"
+              className="inline-flex min-h-12 items-center justify-center px-8 sm:px-12 py-5 bg-white text-black font-black uppercase tracking-[0.2em] text-xs rounded-full hover:bg-neutral-200 transition-all duration-500 hover:-translate-y-1 shadow-2xl shadow-white/10"
             >
               {content.heroPrimaryCtaLabel}
             </Link>
             <Link 
               href={content.heroSecondaryCtaHref}
-              className="px-12 py-5 bg-transparent border border-white/20 text-white font-black uppercase tracking-[0.2em] text-xs rounded-full hover:bg-white/5 hover:border-white transition-all duration-500"
+              className="inline-flex min-h-12 items-center justify-center px-8 sm:px-12 py-5 bg-transparent border border-white/20 text-white font-black uppercase tracking-[0.2em] text-xs rounded-full hover:bg-white/5 hover:border-white transition-all duration-500"
             >
               {content.heroSecondaryCtaLabel}
             </Link>
@@ -76,10 +76,10 @@ export default async function Home() {
 
       {/* Featured Products */}
       <section className="py-32 px-4 container mx-auto">
-        <div className="flex justify-between items-end mb-20">
+        <div className="flex flex-col gap-6 sm:flex-row sm:justify-between sm:items-end mb-16 sm:mb-20">
           <div>
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 block mb-4">Latest Drop</span>
-            <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter">Featured Items</h2>
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black uppercase tracking-tighter">Featured Items</h2>
           </div>
           <Link href="/shop" className="hidden md:flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] hover:gap-4 transition-all duration-500 group">
             View All <ArrowRight className="w-4 h-4" />
@@ -112,7 +112,7 @@ export default async function Home() {
       <section className="py-40 bg-neutral-950 border-y border-gray-900 overflow-hidden relative">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] -mr-64 -mt-64" />
         <div className="container mx-auto px-4 max-w-4xl text-center relative z-10">
-          <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-12 italic leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase tracking-tighter mb-12 italic leading-tight">
             {content.brandName} is more than clothing. It is a mindset: stay positive, move with purpose.
           </h2>
           <Link 
@@ -126,9 +126,9 @@ export default async function Home() {
 
       {/* Instagram / Social CTA */}
       <section className="py-32 container mx-auto px-4">
-        <div className="bg-white text-black rounded-[3rem] p-12 md:p-24 flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
+        <div className="bg-white text-black rounded-[2rem] sm:rounded-[3rem] p-8 sm:p-12 md:p-24 flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
           <div className="max-w-xl">
-            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-none italic">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-none italic">
               Join the movement @positiveonworldwide
             </h2>
             <p className="text-black/60 font-bold uppercase tracking-widest text-xs">

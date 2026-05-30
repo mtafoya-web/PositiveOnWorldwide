@@ -11,7 +11,7 @@ export default async function ShopPage() {
     <main className="min-h-screen bg-black">
       <div className="container mx-auto px-4 py-12 md:py-24">
         <header className="mb-16 text-center">
-          <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase mb-4 italic">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase mb-4 italic">
             Shop the Drop
           </h1>
           <p className="text-gray-400 max-w-xl mx-auto text-lg font-medium">
@@ -44,8 +44,8 @@ export default async function ShopPage() {
                 </div>
                 
                 <div className="space-y-2 px-2">
-                  <div className="flex justify-between items-baseline">
-                    <h2 className="text-xl font-black uppercase tracking-tight group-hover:underline underline-offset-8 decoration-2 decoration-white/20">
+                  <div className="flex flex-col gap-1 min-[420px]:flex-row min-[420px]:items-baseline min-[420px]:justify-between">
+                    <h2 className="text-lg font-black uppercase tracking-tight group-hover:underline underline-offset-8 decoration-2 decoration-white/20 sm:text-xl">
                       {p.name}
                     </h2>
                     <span className="font-bold text-gray-400 text-lg italic">
